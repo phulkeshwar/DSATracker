@@ -7,6 +7,7 @@ let activeF = 'all';
 let activeUsername = '';
 let saveTimer = null;
 let isApplyingRemoteState = false;
+let isLoggingIn = false;
 
 function getRows() {
   return [...document.querySelectorAll('.prob-row')];
@@ -128,13 +129,28 @@ async function loadUserProgress(username) {
 }
 
 async function login(username) {
+  if (isLoggingIn) return;
+
   const cleanUsername = username.trim();
   const loginError = document.getElementById('loginError');
+  const submitButton = document.querySelector('#loginForm button[type="submit"]');
+
+  isLoggingIn = true;
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = 'Opening...';
+  }
+
   loginError.textContent = '';
 
   const validationError = validateUsername(cleanUsername);
   if (validationError) {
     loginError.textContent = validationError;
+    isLoggingIn = false;
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Continue';
+    }
     return;
   }
 
@@ -149,6 +165,11 @@ async function login(username) {
   } catch (error) {
     if (error.status && error.status < 500) {
       loginError.textContent = error.message;
+      isLoggingIn = false;
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Continue';
+      }
       return;
     }
     setSyncState('MongoDB unavailable, using local progress');
@@ -159,6 +180,12 @@ async function login(username) {
   document.getElementById('activeUser').textContent = activeUsername;
   document.getElementById('loginScreen').classList.add('hidden');
   await loadUserProgress(activeUsername);
+
+  isLoggingIn = false;
+  if (submitButton) {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Continue';
+  }
 }
 
 function logout() {
@@ -261,10 +288,13 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('scrollBtn').classList.toggle('vis', main.scrollTop > 300);
   });
 
+  const usernameFromUrl = new URLSearchParams(window.location.search).get('username');
   const rememberedUser = localStorage.getItem(ACTIVE_USER_KEY);
-  if (rememberedUser) {
-    document.getElementById('usernameInput').value = rememberedUser;
-    login(rememberedUser);
+  const usernameToUse = usernameFromUrl || rememberedUser;
+
+  if (usernameToUse) {
+    document.getElementById('usernameInput').value = usernameToUse;
+    login(usernameToUse);
   } else {
     document.getElementById('usernameInput').focus();
   }
