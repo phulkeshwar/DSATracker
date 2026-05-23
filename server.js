@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('TrackerUser', userSchema, 'dsa_tracker_users');
 
 function normalizeUsername(username) {
   return String(username || '').trim().toLowerCase();
