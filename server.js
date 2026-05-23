@@ -140,20 +140,41 @@ app.post('/api/login', requireMongo, async (req, res, next) => {
       return res.status(400).json({ error: validationError });
     }
 
-    const user = await User.findOneAndUpdate(
+    let user = await User.findOneAndUpdate(
       { username },
       {
         $set: {
           displayName,
           lastLoginAt: new Date()
-        },
-        $setOnInsert: {
-          completedProblemIds: [],
-          history: []
         }
       },
-      { new: true, upsert: true }
+      { new: true }
     ).lean();
+
+    if (!user) {
+      try {
+        user = await User.create({
+          username,
+          displayName,
+          completedProblemIds: [],
+          history: [],
+          lastLoginAt: new Date()
+        });
+        user = user.toObject();
+      } catch (error) {
+        if (error.code !== 11000) throw error;
+        user = await User.findOneAndUpdate(
+          { username },
+          {
+            $set: {
+              displayName,
+              lastLoginAt: new Date()
+            }
+          },
+          { new: true }
+        ).lean();
+      }
+    }
 
     res.json({
       username: user.username,
