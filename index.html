@@ -103,6 +103,26 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 .done-cb{width:15px;height:15px;border:1.5px solid var(--border);border-radius:3px;appearance:none;-webkit-appearance:none;cursor:pointer;transition:all .15s;background:transparent;}
 .done-cb:checked{background:var(--green);border-color:var(--green);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 8L6.5 11.5L13 5' stroke='%23080b10' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:11px;background-repeat:no-repeat;background-position:center;}
 
+/* login */
+.login-screen{position:fixed;inset:0;z-index:500;background:radial-gradient(circle at 20% 15%,rgba(0,229,255,.14),transparent 32%),linear-gradient(135deg,#080b10 0%,#101521 52%,#090d13 100%);display:flex;align-items:center;justify-content:center;padding:22px;}
+.login-screen.hidden{display:none;}
+.login-panel{width:min(390px,100%);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:28px;box-shadow:0 22px 80px rgba(0,0,0,.38);}
+.login-panel h2{font-family:'Syne',sans-serif;font-size:25px;font-weight:900;color:var(--text);letter-spacing:0;margin-bottom:8px;}
+.login-panel p{color:var(--muted2);font-size:12px;margin-bottom:20px;}
+.login-panel label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:7px;}
+.login-form{display:flex;gap:10px;}
+.login-form input{flex:1;min-width:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 12px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;}
+.login-form input:focus{border-color:var(--accent);}
+.login-form button,.logout-btn{background:var(--accent);border:0;border-radius:8px;color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;cursor:pointer;}
+.login-form button{padding:0 16px;}
+.login-error{min-height:18px;color:var(--accent3);font-size:11px;margin-top:12px;}
+.account-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.user-pill{display:flex;align-items:center;gap:8px;color:var(--muted2);font-size:11px;}
+.user-pill strong{color:var(--accent);font-weight:700;}
+.sync-state{font-size:10px;color:var(--muted);}
+.logout-btn{padding:8px 12px;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);}
+.logout-btn:hover{border-color:var(--accent);color:var(--accent);}
+
 /* section color dots */
 .c1{background:rgba(0,229,255,.15);}
 .c2{background:rgba(0,230,118,.15);}
@@ -134,10 +154,25 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 #scrollBtn{position:fixed;bottom:22px;right:22px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;padding:9px 13px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;opacity:0;transition:opacity .3s;z-index:200;}
 #scrollBtn.vis{opacity:1;}
 
-@media(max-width:720px){#sidebar{display:none;}#main{padding:18px;}}
+@media(max-width:720px){#sidebar{display:none;}#main{padding:18px;}.login-form{flex-direction:column;}.login-form button{height:40px;}.account-bar{align-items:flex-start;flex-direction:column;}}
 </style>
 </head>
 <body>
+
+<section class="login-screen" id="loginScreen">
+  <div class="login-panel">
+    <h2>Login</h2>
+    <p>Enter your username to create or open your DSA tracker account.</p>
+    <form class="login-form" id="loginForm">
+      <div style="flex:1;min-width:0;">
+        <label for="usernameInput">Username</label>
+        <input id="usernameInput" name="username" type="text" autocomplete="username" maxlength="40" required>
+      </div>
+      <button type="submit">Continue</button>
+    </form>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</section>
 
 <!-- SIDEBAR -->
 <nav id="sidebar">
@@ -182,6 +217,14 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 
 <!-- MAIN -->
 <main id="main">
+  <div class="account-bar">
+    <div>
+      <div class="user-pill">Account: <strong id="activeUser">Guest</strong></div>
+      <div class="sync-state" id="syncState">Waiting for login</div>
+    </div>
+    <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
+  </div>
+
   <div class="page-header">
     <h2>Striver's <span>A2Z DSA Sheet</span></h2>
     <p>Complete · 284 Problems · 25 Sections · Vol 1 + Vol 2 · C++ · LeetCode &amp; GFG Links</p>
@@ -796,61 +839,6 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 
 <button id="scrollBtn" onclick="document.getElementById('main').scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
 
-<script>
-const TOTAL = 284;
-const KEY = 'striver_a2z_v3';
-
-// Load
-window.addEventListener('load', () => {
-  const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
-  const cbs = document.querySelectorAll('.done-cb');
-  cbs.forEach((c, i) => { if(saved[i]) c.checked = true; });
-  upd();
-});
-
-function upd() {
-  const cbs = [...document.querySelectorAll('.done-cb')];
-  const done = cbs.filter(c => c.checked).length;
-  const pct = Math.round(done / TOTAL * 100);
-  document.getElementById('pFill').style.width = pct + '%';
-  document.getElementById('pctLbl').textContent = pct + '%';
-  document.getElementById('sDone').textContent = done;
-  localStorage.setItem(KEY, JSON.stringify(cbs.map(c => c.checked)));
-}
-
-let activeF = 'all';
-function setF(f) {
-  activeF = f;
-  ['all','easy','medium','hard','done'].forEach(x => {
-    document.getElementById('f'+x.charAt(0)).classList.toggle('active', x === f);
-  });
-  filterAll();
-}
-
-function filterAll() {
-  const q = document.getElementById('srch').value.toLowerCase();
-  document.querySelectorAll('.prob-row').forEach(row => {
-    const name = row.querySelector('.pname').textContent.toLowerCase();
-    const diff = row.dataset.d;
-    const done = row.querySelector('.done-cb').checked;
-    const matchQ = !q || name.includes(q);
-    const matchF = activeF === 'all' ||
-      (activeF === 'done' ? done : diff === activeF);
-    row.style.display = matchQ && matchF ? '' : 'none';
-  });
-}
-
-function go(id) {
-  const el = document.getElementById(id);
-  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-}
-
-const main = document.getElementById('main');
-main.addEventListener('scroll', () => {
-  document.getElementById('scrollBtn').classList.toggle('vis', main.scrollTop > 300);
-});
-</script>
+<script src="script.js"></script>
 </body>
 </html>
