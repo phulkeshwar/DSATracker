@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Striver A2Z DSA Sheet — Complete C++</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080b10;
+  --surface: #0e1117;
+  --surface2: #141923;
+  --border: #1c2333;
+  --accent: #00e5ff;
+  --accent2: #7c5cfc;
+  --accent3: #ff6b6b;
+  --green: #00e676;
+  --yellow: #ffd740;
+  --orange: #ff9800;
+  --text: #dde3f0;
+  --muted: #9ea5b1;
+  --muted2: #fffbfb;
+  --easy: #00e676;
+  --medium: #ffd740;
+  --hard: #ff6b6b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;display:flex;min-height:100vh;font-size:13px;line-height:1.5;}
+
+/* ── SIDEBAR ── */
+#sidebar{width:230px;min-width:230px;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+.logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);}
+.logo h1{font-family:'Syne',sans-serif;font-size:14px;font-weight:900;color:var(--accent);letter-spacing:.08em;}
+.logo p{color:var(--muted2);font-size:10px;margin-top:3px;}
+.progress-wrap{padding:14px 18px;border-bottom:1px solid var(--border);}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted2);margin-bottom:6px;}
+.progress-label span:last-child{color:var(--accent);}
+.progress-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:4px;transition:width .4s;}
+.nav-group-label{padding:12px 18px 4px;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 18px;cursor:pointer;border-left:2px solid transparent;color:var(--muted2);font-size:11px;transition:all .15s;text-decoration:none;}
+.nav-item:hover,.nav-item.active{background:var(--surface2);color:var(--accent);border-left-color:var(--accent);}
+.nav-item .n{margin-left:auto;font-size:9px;background:var(--surface2);padding:1px 6px;border-radius:8px;}
+.nav-item.active .n{color:var(--accent);}
+
+/* ── MAIN ── */
+#main{flex:1;overflow-y:auto;padding:36px 44px;}
+.page-header{margin-bottom:32px;}
+.page-header h2{font-family:'Syne',sans-serif;font-size:26px;font-weight:900;color:var(--text);letter-spacing:-.02em;}
+.page-header h2 span{color:var(--accent);}
+.page-header p{color:var(--muted2);font-size:12px;margin-top:6px;}
+
+/* stats */
+.stats-row{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;flex:1;min-width:100px;}
+.stat .v{font-family:'Syne',sans-serif;font-size:20px;font-weight:900;}
+.stat .l{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-top:2px;}
+.stat.t .v{color:var(--accent);}
+.stat.e .v{color:var(--easy);}
+.stat.m .v{color:var(--medium);}
+.stat.h .v{color:var(--hard);}
+.stat.d .v{color:var(--accent2);}
+
+/* search & filter */
+.toolbar{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
+.toolbar input{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;transition:border .2s;}
+.toolbar input:focus{border-color:var(--accent);}
+.toolbar input::placeholder{color:var(--muted);}
+.fbtn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--muted2);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s;}
+.fbtn:hover,.fbtn.active{border-color:var(--accent);color:var(--accent);}
+
+/* section */
+.section{margin-bottom:44px;}
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.sec-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.sec-hdr h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;letter-spacing:-.01em;}
+.sec-hdr .sec-vol{font-size:9px;background:var(--surface2);border:1px solid var(--border);padding:2px 8px;border-radius:10px;color:var(--muted2);}
+.sec-hdr .sec-cnt{margin-left:auto;font-size:10px;color:var(--muted2);background:var(--surface2);padding:2px 10px;border-radius:10px;}
+
+/* table */
+.ptbl{width:100%;border-collapse:collapse;}
+.ptbl thead tr{background:var(--surface2);}
+.ptbl th{padding:9px 12px;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:500;}
+.ptbl td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.ptbl tr:last-child td{border-bottom:none;}
+.ptbl tr.prob-row:hover td{background:var(--surface2);}
+.pnum{color:var(--muted);font-size:10px;width:36px;}
+.pname a{color:var(--text);text-decoration:none;font-size:12px;transition:color .15s;}
+.pname a:hover{color:var(--accent);}
+.pname .sub{font-size:10px;color:var(--muted2);margin-top:2px;}
+.pname.gfg-only{color:var(--muted2);font-size:12px;}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.04em;}
+.badge.easy{background:rgba(0,230,118,.12);color:var(--easy);}
+.badge.medium{background:rgba(255,215,64,.12);color:var(--medium);}
+.badge.hard{background:rgba(255,107,107,.12);color:var(--hard);}
+.plat{display:inline-block;padding:2px 7px;border-radius:3px;font-size:9px;font-weight:600;}
+.plat.lc{background:rgba(0,229,255,.1);color:var(--accent);}
+.plat.gfg{background:rgba(124,92,252,.1);color:var(--accent2);}
+.plat.cs{background:rgba(255,152,0,.1);color:var(--orange);}
+.done-cb{width:15px;height:15px;border:1.5px solid var(--border);border-radius:3px;appearance:none;-webkit-appearance:none;cursor:pointer;transition:all .15s;background:transparent;}
+.done-cb:checked{background:var(--green);border-color:var(--green);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 8L6.5 11.5L13 5' stroke='%23080b10' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:11px;background-repeat:no-repeat;background-position:center;}
+
+/* section color dots */
+.c1{background:rgba(0,229,255,.15);}
+.c2{background:rgba(0,230,118,.15);}
+.c3{background:rgba(0,229,255,.12);}
+.c4{background:rgba(0,230,118,.12);}
+.c5{background:rgba(255,215,64,.15);}
+.c6{background:rgba(255,107,107,.15);}
+.c7{background:rgba(124,92,252,.15);}
+.c8{background:rgba(171,71,188,.15);}
+.c9{background:rgba(255,152,0,.15);}
+.c10{background:rgba(0,188,212,.15);}
+.c11{background:rgba(236,64,122,.15);}
+.c12{background:rgba(105,240,174,.15);}
+.c13{background:rgba(255,193,7,.15);}
+.c14{background:rgba(156,39,176,.15);}
+.c15{background:rgba(33,150,243,.15);}
+.c16{background:rgba(255,87,34,.15);}
+.c17{background:rgba(0,230,118,.15);}
+.c18{background:rgba(255,215,64,.12);}
+.c19{background:rgba(255,107,107,.12);}
+.c20{background:rgba(255,152,0,.12);}
+.c21{background:rgba(0,188,212,.12);}
+.c22{background:rgba(105,240,174,.12);}
+.c23{background:rgba(255,193,7,.12);}
+.c24{background:rgba(33,150,243,.12);}
+.c25{background:rgba(255,87,34,.12);}
+
+/* scroll top */
+#scrollBtn{position:fixed;bottom:22px;right:22px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;padding:9px 13px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;opacity:0;transition:opacity .3s;z-index:200;}
+#scrollBtn.vis{opacity:1;}
+
+@media(max-width:720px){#sidebar{display:none;}#main{padding:18px;}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="logo">
+    <h1>STRIVER A2Z</h1>
+    <p>Complete DSA · C++ · 284 Problems</p>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="pctLbl">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="nav-group-label">Vol 1 — Core</div>
+  <a class="nav-item" onclick="go('s1')">🧮 Basics &amp; Math <span class="n">8</span></a>
+  <a class="nav-item" onclick="go('s2')">🔃 Sorting <span class="n">5</span></a>
+  <a class="nav-item" onclick="go('s3')">📦 Arrays <span class="n">27</span></a>
+  <a class="nav-item" onclick="go('s4')">🔍 Binary Search <span class="n">18</span></a>
+  <a class="nav-item" onclick="go('s5')">🔤 Strings <span class="n">11</span></a>
+  <a class="nav-item" onclick="go('s6')">🔗 Linked Lists <span class="n">15</span></a>
+  <a class="nav-item" onclick="go('s7')">🌀 Recursion &amp; BT <span class="n">14</span></a>
+  <a class="nav-item" onclick="go('s8')">🔢 Bit Manipulation <span class="n">7</span></a>
+  <a class="nav-item" onclick="go('s9')">📚 Stack &amp; Queue <span class="n">12</span></a>
+  <a class="nav-item" onclick="go('s10')">🪟 Sliding Window <span class="n">5</span></a>
+  <a class="nav-item" onclick="go('s11')">⛰️ Heaps <span class="n">4</span></a>
+  <a class="nav-item" onclick="go('s12')">⚡ Greedy <span class="n">8</span></a>
+  <a class="nav-item" onclick="go('s13')">🌳 Binary Trees <span class="n">18</span></a>
+  <a class="nav-item" onclick="go('s14')">🌲 BST <span class="n">8</span></a>
+  <a class="nav-item" onclick="go('s15')">🕸️ Graphs <span class="n">18</span></a>
+  <a class="nav-item" onclick="go('s16')">💡 DP <span class="n">16</span></a>
+  <a class="nav-item" onclick="go('s17')">🔡 Tries <span class="n">4</span></a>
+
+  <div class="nav-group-label">Vol 2 — Advanced</div>
+  <a class="nav-item" onclick="go('s18')">🧵 Adv. Strings <span class="n">6</span></a>
+  <a class="nav-item" onclick="go('s19')">🔗 Adv. Linked List <span class="n">6</span></a>
+  <a class="nav-item" onclick="go('s20')">📚 Adv. Stack &amp; Q <span class="n">8</span></a>
+  <a class="nav-item" onclick="go('s21')">🪟 Adv. Sliding W. <span class="n">5</span></a>
+  <a class="nav-item" onclick="go('s22')">⚡ Adv. Greedy/Heap <span class="n">7</span></a>
+  <a class="nav-item" onclick="go('s23')">🌳 Adv. Trees <span class="n">11</span></a>
+  <a class="nav-item" onclick="go('s24')">🕸️ Adv. Graphs <span class="n">12</span></a>
+  <a class="nav-item" onclick="go('s25')">💡 Complete DP <span class="n">31</span></a>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+  <div class="page-header">
+    <h2>Striver's <span>A2Z DSA Sheet</span></h2>
+    <p>Complete · 284 Problems · 25 Sections · Vol 1 + Vol 2 · C++ · LeetCode &amp; GFG Links</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat t"><div class="v" id="sTot">284</div><div class="l">Total</div></div>
+    <div class="stat e"><div class="v" id="sEasy">99</div><div class="l">Easy</div></div>
+    <div class="stat m"><div class="v" id="sMed">130</div><div class="l">Medium</div></div>
+    <div class="stat h"><div class="v" id="sHard">55</div><div class="l">Hard</div></div>
+    <div class="stat d"><div class="v" id="sDone">0</div><div class="l">Done ✓</div></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="srch" placeholder="Search any problem..." oninput="filterAll()">
+    <button class="fbtn active" id="fa" onclick="setF('all')">All</button>
+    <button class="fbtn" id="fe" onclick="setF('easy')">Easy</button>
+    <button class="fbtn" id="fm" onclick="setF('medium')">Medium</button>
+    <button class="fbtn" id="fh" onclick="setF('hard')">Hard</button>
+    <button class="fbtn" id="fd" onclick="setF('done')">Done ✓</button>
+  </div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 1 — LEARN THE BASICS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="sec-hdr">
+    <div class="sec-icon c1">🧮</div>
+    <h3>Learn the Basics — Math &amp; Hashing</h3>
+    <span class="sec-vol">Vol 1 · Step 1</span>
+    <span class="sec-cnt">8 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">1</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/count-digits5716/1" target="_blank">Count Digits</a><div class="sub">Modulo % and division /</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">2</td><td class="pname"><a href="https://leetcode.com/problems/reverse-integer/" target="_blank">Reverse a Number</a><div class="sub">Overflow checking during reversal</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 7</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">3</td><td class="pname"><a href="https://leetcode.com/problems/palindrome-number/" target="_blank">Check Palindrome Number</a><div class="sub">Reversing half or full number</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 9</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">4</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/lcm-and-gcd4516/1" target="_blank">GCD or HCF</a><div class="sub">Euclidean Algorithm: gcd(a,b) = gcd(b, a%b)</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">5</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/armstrong-numbers2727/1" target="_blank">Armstrong Numbers</a><div class="sub">Power and digit extraction</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">6</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/sum-of-all-divisors-from-1-to-n4738/1" target="_blank">Print all Divisors</a><div class="sub">Iterate up to sqrt(n)</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">7</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/prime-number2314/1" target="_blank">Check for Prime</a><div class="sub">sqrt(n) time complexity</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">8</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/frequency-of-array-elements-1587115620/1" target="_blank">Frequency of Array Elements</a><div class="sub">C++ unordered_map or array hashing</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 2 — SORTING -->
+<div class="section" id="s2">
+  <div class="sec-hdr">
+    <div class="sec-icon c2">🔃</div>
+    <h3>Sorting Techniques</h3>
+    <span class="sec-vol">Vol 1 · Step 2</span>
+    <span class="sec-cnt">5 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">9</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/selection-sort/1" target="_blank">Selection Sort</a><div class="sub">Find min and swap</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">10</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/bubble-sort/1" target="_blank">Bubble Sort</a><div class="sub">Adjacent swapping, push max to end</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">11</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/insertion-sort/0" target="_blank">Insertion Sort</a><div class="sub">Place element in correct sorted left position</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">12</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/merge-sort/1" target="_blank">Merge Sort</a><div class="sub">Divide &amp; Conquer / O(N log N)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">13</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/quick-sort/1" target="_blank">Quick Sort</a><div class="sub">Pivot partitioning / O(N log N)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 3 — ARRAYS -->
+<div class="section" id="s3">
+  <div class="sec-hdr">
+    <div class="sec-icon c3">📦</div>
+    <h3>Arrays — Easy, Medium, Hard</h3>
+    <span class="sec-vol">Vol 1 · Step 3</span>
+    <span class="sec-cnt">27 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">14</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/largest-element-in-array4009/1" target="_blank">Largest Element in Array</a><div class="sub">Linear scan</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">15</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/second-largest3735/1" target="_blank">Second Largest Element</a><div class="sub">Two variables tracking max and second max</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">16</td><td class="pname"><a href="https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/" target="_blank">Check if Array is Sorted</a><div class="sub">Count drops in monotonic sequence</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 1752</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">17</td><td class="pname"><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array/" target="_blank">Remove Duplicates from Sorted Array</a><div class="sub">Two pointer approach (i and j)</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 26</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">18</td><td class="pname"><a href="https://leetcode.com/problems/rotate-array/" target="_blank">Left Rotate Array by K</a><div class="sub">Reversal Algorithm: reverse(0,k), reverse(k,n)</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 189</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">19</td><td class="pname"><a href="https://leetcode.com/problems/move-zeroes/" target="_blank">Move Zeros to End</a><div class="sub">Two pointers tracking zero position</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 283</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">20</td><td class="pname"><a href="https://leetcode.com/problems/missing-number/" target="_blank">Missing Number</a><div class="sub">Sum formula N*(N+1)/2 or XOR ^</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 268</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">21</td><td class="pname"><a href="https://leetcode.com/problems/two-sum/" target="_blank">Two Sum</a><div class="sub">C++ unordered_map</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 1</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">22</td><td class="pname"><a href="https://leetcode.com/problems/sort-colors/" target="_blank">Sort Colors (0, 1, 2)</a><div class="sub">Dutch National Flag Algorithm</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 75</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">23</td><td class="pname"><a href="https://leetcode.com/problems/majority-element/" target="_blank">Majority Element (&gt;N/2)</a><div class="sub">Moore's Voting Algorithm</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 169</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">24</td><td class="pname"><a href="https://leetcode.com/problems/maximum-subarray/" target="_blank">Kadane's Algorithm (Max Subarray)</a><div class="sub">Carry forward positive sums</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 53</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">25</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank">Best Time to Buy &amp; Sell Stock I</a><div class="sub">Keep track of running minimum</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 121</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">26</td><td class="pname"><a href="https://leetcode.com/problems/rearrange-array-elements-by-sign/" target="_blank">Rearrange Array by Sign</a><div class="sub">Two separate indices for pos/neg</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 2149</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">27</td><td class="pname"><a href="https://leetcode.com/problems/next-permutation/" target="_blank">Next Permutation</a><div class="sub">Find dip, swap, reverse right half</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 31</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">28</td><td class="pname"><a href="https://leetcode.com/problems/longest-consecutive-sequence/" target="_blank">Longest Consecutive Sequence</a><div class="sub">HashSet unordered_set / O(N)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 128</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">29</td><td class="pname"><a href="https://leetcode.com/problems/set-matrix-zeroes/" target="_blank">Set Matrix Zeroes</a><div class="sub">Use first row/col as hash array</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 73</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">30</td><td class="pname"><a href="https://leetcode.com/problems/rotate-image/" target="_blank">Rotate Image</a><div class="sub">Transpose matrix, then reverse rows</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 48</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">31</td><td class="pname"><a href="https://leetcode.com/problems/spiral-matrix/" target="_blank">Spiral Matrix</a><div class="sub">4 boundary pointers (top, bottom, left, right)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 54</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">32</td><td class="pname"><a href="https://leetcode.com/problems/pascals-triangle/" target="_blank">Pascal's Triangle</a><div class="sub">nCr math generation</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 118</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">33</td><td class="pname"><a href="https://leetcode.com/problems/majority-element-ii/" target="_blank">Majority Element II (&gt;N/3)</a><div class="sub">Extended Moore's Voting (2 tracking vars)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 229</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">34</td><td class="pname"><a href="https://leetcode.com/problems/3sum/" target="_blank">3 Sum</a><div class="sub">Sort + Two Pointers</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 15</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">35</td><td class="pname"><a href="https://leetcode.com/problems/4sum/" target="_blank">4 Sum</a><div class="sub">Sort + Loop + Loop + Two Pointers</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 18</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">36</td><td class="pname"><a href="https://leetcode.com/problems/merge-intervals/" target="_blank">Merge Overlapping Intervals</a><div class="sub">Sort by start time, merge if end &gt;= next_start</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 56</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">37</td><td class="pname"><a href="https://leetcode.com/problems/merge-sorted-array/" target="_blank">Merge Sorted Arrays (without extra space)</a><div class="sub">Gap method / Shell sort logic</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 88</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">38</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/find-missing-and-repeating2512/1" target="_blank">Missing &amp; Repeating Number</a><div class="sub">Math equations (Sum &amp; Sum of Squares) or XOR</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">39</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/inversion-of-array-1587115620/1" target="_blank">Count Inversions</a><div class="sub">Modified Merge Sort</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">40</td><td class="pname"><a href="https://leetcode.com/problems/reverse-pairs/" target="_blank">Reverse Pairs</a><div class="sub">Modified Merge Sort</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 493</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 4 — BINARY SEARCH -->
+<div class="section" id="s4">
+  <div class="sec-hdr">
+    <div class="sec-icon c4">🔍</div>
+    <h3>Binary Search</h3>
+    <span class="sec-vol">Vol 1 · Step 4</span>
+    <span class="sec-cnt">18 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">41</td><td class="pname"><a href="https://leetcode.com/problems/binary-search/" target="_blank">Binary Search</a><div class="sub">Iterative low, high, mid</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 704</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">42</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/floor-in-a-sorted-array-1587115620/1" target="_blank">Lower Bound</a><div class="sub">std::lower_bound in C++ / Custom implementation</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">43</td><td class="pname"><a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank">First and Last Occurrence</a><div class="sub">Two separate binary searches</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 34</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">44</td><td class="pname"><a href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank">Search in Rotated Sorted Array I</a><div class="sub">Identify which half is sorted</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 33</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">45</td><td class="pname"><a href="https://leetcode.com/problems/search-in-rotated-sorted-array-ii/" target="_blank">Search in Rotated Sorted Array II</a><div class="sub">Handle duplicates by shrinking space low++, high--</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 81</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">46</td><td class="pname"><a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank">Find Min in Rotated Sorted Array</a><div class="sub">Pivot identification</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 153</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">47</td><td class="pname"><a href="https://leetcode.com/problems/single-element-in-a-sorted-array/" target="_blank">Single Element in Sorted Array</a><div class="sub">Odd/Even index checking</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 540</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">48</td><td class="pname"><a href="https://leetcode.com/problems/find-peak-element/" target="_blank">Find Peak Element</a><div class="sub">Slope checking: arr[mid] &gt; arr[mid+1]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 162</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">49</td><td class="pname"><a href="https://leetcode.com/problems/sqrtx/" target="_blank">Sqrt(x)</a><div class="sub">BS on Answer range [1, x]</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 69</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">50</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/find-nth-root-of-m5843/1" target="_blank">Nth Root of M</a><div class="sub">BS on Answer / Handling overflow</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">51</td><td class="pname"><a href="https://leetcode.com/problems/koko-eating-bananas/" target="_blank">Koko Eating Bananas</a><div class="sub">BS on Answer (Min capacity)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 875</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">52</td><td class="pname"><a href="https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/" target="_blank">Minimum Days to Make M Bouquets</a><div class="sub">BS on Answer</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1482</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">53</td><td class="pname"><a href="https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/" target="_blank">Capacity to Ship Packages</a><div class="sub">BS on Answer</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1011</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">54</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/aggressive-cows/1" target="_blank">Aggressive Cows</a><div class="sub">BS on max of minimum distances</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">55</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1" target="_blank">Allocate Books</a><div class="sub">BS on min of maximum pages</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">56</td><td class="pname"><a href="https://leetcode.com/problems/split-array-largest-sum/" target="_blank">Split Array Largest Sum</a><div class="sub">Identical logic to Allocate Books</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 410</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">57</td><td class="pname"><a href="https://leetcode.com/problems/search-a-2d-matrix/" target="_blank">Search in a 2D Matrix</a><div class="sub">Treat 2D as 1D: matrix[mid/m][mid%m]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 74</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">58</td><td class="pname"><a href="https://leetcode.com/problems/search-a-2d-matrix-ii/" target="_blank">Search in a 2D Matrix II</a><div class="sub">Start from top-right or bottom-left</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 240</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 5 — STRINGS -->
+<div class="section" id="s5">
+  <div class="sec-hdr">
+    <div class="sec-icon c5">🔤</div>
+    <h3>Strings</h3>
+    <span class="sec-vol">Vol 1 · Step 5</span>
+    <span class="sec-cnt">11 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">59</td><td class="pname"><a href="https://leetcode.com/problems/remove-outermost-parentheses/" target="_blank">Remove Outermost Parentheses</a><div class="sub">Counter tracking depth</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 1021</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">60</td><td class="pname"><a href="https://leetcode.com/problems/reverse-words-in-a-string/" target="_blank">Reverse Words in a String</a><div class="sub">Stringstream / Stack / Two Pointers</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 151</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">61</td><td class="pname"><a href="https://leetcode.com/problems/largest-odd-number-in-string/" target="_blank">Largest Odd Number in String</a><div class="sub">Find rightmost odd digit</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 1903</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">62</td><td class="pname"><a href="https://leetcode.com/problems/longest-common-prefix/" target="_blank">Longest Common Prefix</a><div class="sub">Sort strings, compare first and last</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 14</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">63</td><td class="pname"><a href="https://leetcode.com/problems/isomorphic-strings/" target="_blank">Isomorphic Strings</a><div class="sub">Two Hash Maps</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 205</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">64</td><td class="pname"><a href="https://leetcode.com/problems/rotate-string/" target="_blank">Check if Strings are Rotations</a><div class="sub">Check if s2 is substring of s1+s1</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 796</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">65</td><td class="pname"><a href="https://leetcode.com/problems/valid-anagram/" target="_blank">Valid Anagram</a><div class="sub">Character frequency counting</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 242</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">66</td><td class="pname"><a href="https://leetcode.com/problems/sort-characters-by-frequency/" target="_blank">Sort Characters by Frequency</a><div class="sub">Hash Map + Priority Queue / Bucket Sort</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 451</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">67</td><td class="pname"><a href="https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/" target="_blank">Maximum Nesting Depth</a><div class="sub">Max open brackets counter</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 1614</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">68</td><td class="pname"><a href="https://leetcode.com/problems/roman-to-integer/" target="_blank">Roman to Integer</a><div class="sub">Hash Map, subtract if s[i] &lt; s[i+1]</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 13</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">69</td><td class="pname"><a href="https://leetcode.com/problems/string-to-integer-atoi/" target="_blank">String to Integer (atoi)</a><div class="sub">Sign checking, overflow handling</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 8</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 6 — LINKED LISTS -->
+<div class="section" id="s6">
+  <div class="sec-hdr">
+    <div class="sec-icon c6">🔗</div>
+    <h3>Linked Lists</h3>
+    <span class="sec-vol">Vol 1 · Step 6</span>
+    <span class="sec-cnt">15 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">70</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/introduction-to-linked-list/1" target="_blank">Intro to Linked List</a><div class="sub">Structs / Classes in C++</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">71</td><td class="pname"><a href="https://leetcode.com/problems/middle-of-the-linked-list/" target="_blank">Middle of Linked List</a><div class="sub">Slow &amp; Fast Pointers</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 876</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">72</td><td class="pname"><a href="https://leetcode.com/problems/reverse-linked-list/" target="_blank">Reverse Linked List</a><div class="sub">Prev, Curr, Next pointers</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 206</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">73</td><td class="pname"><a href="https://leetcode.com/problems/linked-list-cycle/" target="_blank">Detect a Cycle</a><div class="sub">Floyd's Tortoise and Hare</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 141</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">74</td><td class="pname"><a href="https://leetcode.com/problems/linked-list-cycle-ii/" target="_blank">Starting Point of Cycle</a><div class="sub">Move slow to head, advance both by 1</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 142</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">75</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/find-length-of-loop/1" target="_blank">Length of Loop</a><div class="sub">Freeze slow, move fast to count</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">76</td><td class="pname"><a href="https://leetcode.com/problems/palindrome-linked-list/" target="_blank">Check if Palindrome LL</a><div class="sub">Find mid, reverse right half, compare</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 234</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">77</td><td class="pname"><a href="https://leetcode.com/problems/odd-even-linked-list/" target="_blank">Segregate Odd/Even Nodes</a><div class="sub">Odd/Even dummy heads</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 328</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">78</td><td class="pname"><a href="https://leetcode.com/problems/remove-nth-node-from-end-of-list/" target="_blank">Remove Nth Node from Back</a><div class="sub">Fast pointer lead by N</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 19</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">79</td><td class="pname"><a href="https://leetcode.com/problems/delete-node-in-a-linked-list/" target="_blank">Delete Node without Head</a><div class="sub">Copy next node value, delete next node</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 237</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">80</td><td class="pname"><a href="https://leetcode.com/problems/intersection-of-two-linked-lists/" target="_blank">Intersection of Two Linked Lists</a><div class="sub">Align lengths / Dual traversal</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 160</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">81</td><td class="pname"><a href="https://leetcode.com/problems/add-two-numbers/" target="_blank">Add Two Numbers</a><div class="sub">Carry tracking</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 2</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">82</td><td class="pname"><a href="https://leetcode.com/problems/reverse-nodes-in-k-group/" target="_blank">Reverse LL in Groups of K</a><div class="sub">Group counting and modular reversal</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 25</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">83</td><td class="pname"><a href="https://leetcode.com/problems/rotate-list/" target="_blank">Rotate a Linked List</a><div class="sub">Connect tail to head, break at len - k%len</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 61</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">84</td><td class="pname"><a href="https://leetcode.com/problems/copy-list-with-random-pointer/" target="_blank">Clone LL with Random Pointer</a><div class="sub">Insert copy nodes in-between original nodes</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 138</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 7 — RECURSION & BACKTRACKING -->
+<div class="section" id="s7">
+  <div class="sec-hdr">
+    <div class="sec-icon c7">🌀</div>
+    <h3>Recursion &amp; Backtracking</h3>
+    <span class="sec-vol">Vol 1 · Step 7</span>
+    <span class="sec-cnt">14 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">85</td><td class="pname"><a href="https://leetcode.com/problems/powx-n/" target="_blank">Pow(x, n)</a><div class="sub">Binary Exponentiation</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 50</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">86</td><td class="pname"><a href="https://leetcode.com/problems/generate-parentheses/" target="_blank">Generate Parentheses</a><div class="sub">Open/Close count balancing</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 22</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">87</td><td class="pname"><a href="https://leetcode.com/problems/subsets/" target="_blank">Subsets I</a><div class="sub">Pick / Not-Pick Tree</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 78</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">88</td><td class="pname"><a href="https://leetcode.com/problems/subsets-ii/" target="_blank">Subsets II</a><div class="sub">Sorting to avoid duplicates</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 90</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">89</td><td class="pname"><a href="https://leetcode.com/problems/combination-sum/" target="_blank">Combination Sum I</a><div class="sub">Unbounded pick</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 39</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">90</td><td class="pname"><a href="https://leetcode.com/problems/combination-sum-ii/" target="_blank">Combination Sum II</a><div class="sub">Single-use pick with duplicates</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 40</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">91</td><td class="pname"><a href="https://leetcode.com/problems/combination-sum-iii/" target="_blank">Combination Sum III</a><div class="sub">Size K limit</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 216</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">92</td><td class="pname"><a href="https://leetcode.com/problems/letter-combinations-of-a-phone-number/" target="_blank">Letter Combinations of Phone Number</a><div class="sub">Mapping string to digits</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 17</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">93</td><td class="pname"><a href="https://leetcode.com/problems/palindrome-partitioning/" target="_blank">Palindrome Partitioning</a><div class="sub">Check palindrome prefix, recurse rest</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 131</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">94</td><td class="pname"><a href="https://leetcode.com/problems/word-search/" target="_blank">Word Search</a><div class="sub">Grid Backtracking (DFS)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 79</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">95</td><td class="pname"><a href="https://leetcode.com/problems/n-queens/" target="_blank">N-Queens Problem</a><div class="sub">Hashing diagonals for O(1) checks</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 51</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">96</td><td class="pname"><a href="https://leetcode.com/problems/sudoku-solver/" target="_blank">Sudoku Solver</a><div class="sub">Exhaustive 1-9 validation</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 37</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">97</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1" target="_blank">M-Coloring Problem</a><div class="sub">Graph backtracking</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">98</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/rat-in-a-maze-problem/1" target="_blank">Rat in a Maze</a><div class="sub">Directional Arrays (dx, dy)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 8 — BIT MANIPULATION -->
+<div class="section" id="s8">
+  <div class="sec-hdr">
+    <div class="sec-icon c8">🔢</div>
+    <h3>Bit Manipulation</h3>
+    <span class="sec-vol">Vol 1 · Step 8</span>
+    <span class="sec-cnt">7 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">99</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/check-whether-k-th-bit-is-set-or-not-1587115620/1" target="_blank">Check if ith Bit is Set</a><div class="sub">(n &amp; (1 &lt;&lt; i)) != 0</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">100</td><td class="pname"><a href="https://leetcode.com/problems/power-of-two/" target="_blank">Check if Power of 2</a><div class="sub">(n &amp; (n-1)) == 0</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 231</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">101</td><td class="pname"><a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank">Count Set Bits</a><div class="sub">Kernighan's Algorithm: n = n &amp; (n-1)</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 191</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">102</td><td class="pname"><a href="https://leetcode.com/problems/single-number/" target="_blank">Single Number I</a><div class="sub">XOR all elements</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 136</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">103</td><td class="pname"><a href="https://leetcode.com/problems/single-number-ii/" target="_blank">Single Number II</a><div class="sub">Bit buckets / Math logic</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 137</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">104</td><td class="pname"><a href="https://leetcode.com/problems/single-number-iii/" target="_blank">Single Number III</a><div class="sub">Find rightmost set bit XOR mask</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 260</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">105</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/xor-of-numbers-in-a-given-range4003/1" target="_blank">XOR from L to R</a><div class="sub">Pattern of XOR up to N</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 9 — STACK & QUEUE -->
+<div class="section" id="s9">
+  <div class="sec-hdr">
+    <div class="sec-icon c9">📚</div>
+    <h3>Stack &amp; Queues</h3>
+    <span class="sec-vol">Vol 1 · Step 9</span>
+    <span class="sec-cnt">12 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">106</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/implement-stack-using-array/1" target="_blank">Implement Stack using Arrays</a><div class="sub">top pointer</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">107</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/implement-queue-using-array/1" target="_blank">Implement Queue using Arrays</a><div class="sub">front, rear pointers</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">108</td><td class="pname"><a href="https://leetcode.com/problems/implement-stack-using-queues/" target="_blank">Implement Stack using Queue</a><div class="sub">Single queue logic</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 225</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">109</td><td class="pname"><a href="https://leetcode.com/problems/implement-queue-using-stacks/" target="_blank">Implement Queue using Stack</a><div class="sub">Two stacks (Input/Output)</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 232</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">110</td><td class="pname"><a href="https://leetcode.com/problems/valid-parentheses/" target="_blank">Valid Parentheses</a><div class="sub">Stack matching brackets</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 20</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">111</td><td class="pname"><a href="https://leetcode.com/problems/min-stack/" target="_blank">Min Stack</a><div class="sub">Storing Pairs (val, min_so_far)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 155</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">112</td><td class="pname"><a href="https://leetcode.com/problems/next-greater-element-i/" target="_blank">Next Greater Element I</a><div class="sub">Monotonic Decreasing Stack</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 496</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">113</td><td class="pname"><a href="https://leetcode.com/problems/next-greater-element-ii/" target="_blank">Next Greater Element II (Circular)</a><div class="sub">Monotonic Stack with array doubling logic</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 503</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">114</td><td class="pname"><a href="https://leetcode.com/problems/trapping-rain-water/" target="_blank">Trapping Rain Water</a><div class="sub">Pre-computation (Prefix/Suffix Max) or Two Pointers</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 42</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">115</td><td class="pname"><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank">Largest Rectangle in Histogram</a><div class="sub">Left Smallest &amp; Right Smallest bounds</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 84</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">116</td><td class="pname"><a href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank">Sliding Window Maximum</a><div class="sub">std::deque / Monotonic Queue</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 239</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">117</td><td class="pname"><a href="https://leetcode.com/problems/online-stock-span/" target="_blank">Online Stock Span</a><div class="sub">Monotonic Stack of pairs</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 901</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 10 — SLIDING WINDOW -->
+<div class="section" id="s10">
+  <div class="sec-hdr">
+    <div class="sec-icon c10">🪟</div>
+    <h3>Sliding Window &amp; Two Pointers</h3>
+    <span class="sec-vol">Vol 1 · Step 10</span>
+    <span class="sec-cnt">5 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">118</td><td class="pname"><a href="https://leetcode.com/problems/max-consecutive-ones-iii/" target="_blank">Max Consecutive Ones III</a><div class="sub">Shrink window if zero count &gt; K</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1004</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">119</td><td class="pname"><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/" target="_blank">Longest Substring Without Repeating Chars</a><div class="sub">Hash Map tracking indices</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 3</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">120</td><td class="pname"><a href="https://leetcode.com/problems/fruit-into-baskets/" target="_blank">Fruits into Baskets</a><div class="sub">At most 2 distinct characters</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 904</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">121</td><td class="pname"><a href="https://leetcode.com/problems/longest-repeating-character-replacement/" target="_blank">Longest Repeating Character Replacement</a><div class="sub">len - max_freq &lt;= K</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 424</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">122</td><td class="pname"><a href="https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/" target="_blank">Number of Substrings Containing All 3 Chars</a><div class="sub">Tracking last seen indices</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1358</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 11 — HEAPS -->
+<div class="section" id="s11">
+  <div class="sec-hdr">
+    <div class="sec-icon c11">⛰️</div>
+    <h3>Heaps / Priority Queues</h3>
+    <span class="sec-vol">Vol 1 · Step 11</span>
+    <span class="sec-cnt">4 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">123</td><td class="pname"><a href="https://leetcode.com/problems/kth-largest-element-in-an-array/" target="_blank">Kth Largest Element</a><div class="sub">Min-Heap of size K</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 215</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">124</td><td class="pname"><a href="https://leetcode.com/problems/top-k-frequent-elements/" target="_blank">Top K Frequent Elements</a><div class="sub">Min-Heap of Pairs (freq, val)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 347</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">125</td><td class="pname"><a href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank">Merge K Sorted Lists</a><div class="sub">Min-Heap holding node pointers</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 23</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">126</td><td class="pname"><a href="https://leetcode.com/problems/find-median-from-data-stream/" target="_blank">Find Median from Data Stream</a><div class="sub">Max-Heap (left) + Min-Heap (right)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 295</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 12 — GREEDY -->
+<div class="section" id="s12">
+  <div class="sec-hdr">
+    <div class="sec-icon c12">⚡</div>
+    <h3>Greedy Algorithms</h3>
+    <span class="sec-vol">Vol 1 · Step 12</span>
+    <span class="sec-cnt">8 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">127</td><td class="pname"><a href="https://leetcode.com/problems/assign-cookies/" target="_blank">Assign Cookies</a><div class="sub">Sort both arrays, two pointers</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 455</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">128</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/fractional-knapsack-1587115620/1" target="_blank">Fractional Knapsack</a><div class="sub">Sort by value/weight ratio</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">129</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/minimum-coins/0" target="_blank">Minimum Coins</a><div class="sub">Start subtracting from highest denomination</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">130</td><td class="pname"><a href="https://leetcode.com/problems/lemonade-change/" target="_blank">Lemonade Change</a><div class="sub">Track 5s and 10s counts</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 860</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">131</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/n-meetings-in-one-room-1587115620/1" target="_blank">N Meetings in One Room</a><div class="sub">Sort by ending time</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">132</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/minimum-platforms-1587115620/1" target="_blank">Minimum Platforms</a><div class="sub">Sort arrivals and departures separately</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">133</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/job-sequencing-problem-1587115620/1" target="_blank">Job Sequencing Problem</a><div class="sub">Sort by profit, schedule at max deadline</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">134</td><td class="pname"><a href="https://leetcode.com/problems/candy/" target="_blank">Candy Distribution</a><div class="sub">Left to right pass, then right to left pass</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 135</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 13 — BINARY TREES -->
+<div class="section" id="s13">
+  <div class="sec-hdr">
+    <div class="sec-icon c13">🌳</div>
+    <h3>Binary Trees</h3>
+    <span class="sec-vol">Vol 1 · Step 13</span>
+    <span class="sec-cnt">18 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">135</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-preorder-traversal/" target="_blank">Preorder Traversal</a><div class="sub">Root -&gt; Left -&gt; Right</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 144</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">136</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/" target="_blank">Inorder Traversal</a><div class="sub">Left -&gt; Root -&gt; Right</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 94</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">137</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-postorder-traversal/" target="_blank">Postorder Traversal</a><div class="sub">Left -&gt; Right -&gt; Root</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 145</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">138</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank">Level Order Traversal</a><div class="sub">BFS using std::queue</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 102</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">139</td><td class="pname"><a href="https://leetcode.com/problems/maximum-depth-of-binary-tree/" target="_blank">Maximum Depth of Binary Tree</a><div class="sub">1 + max(left, right)</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 104</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">140</td><td class="pname"><a href="https://leetcode.com/problems/balanced-binary-tree/" target="_blank">Check Balanced Binary Tree</a><div class="sub">Return -1 if unbalanced, else height</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 110</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">141</td><td class="pname"><a href="https://leetcode.com/problems/diameter-of-binary-tree/" target="_blank">Diameter of Binary Tree</a><div class="sub">Update max during height calculation</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 543</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">142</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/" target="_blank">Maximum Path Sum</a><div class="sub">Ignore negative branches max(0, val)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 124</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">143</td><td class="pname"><a href="https://leetcode.com/problems/same-tree/" target="_blank">Same Tree</a><div class="sub">Simultaneous traversal</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 100</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">144</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/" target="_blank">Zig-Zag Level Order Traversal</a><div class="sub">BFS with leftToRight boolean flag</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 103</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">145</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1" target="_blank">Boundary Traversal</a><div class="sub">Left boundary + Leaves + Right boundary (reversed)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">146</td><td class="pname"><a href="https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/" target="_blank">Vertical Order Traversal</a><div class="sub">Map&lt;Vertical, Map&lt;Level, Multiset&gt;&gt;</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 987</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">147</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/top-view-of-binary-tree/1" target="_blank">Top View of Binary Tree</a><div class="sub">BFS + Map (Store only first node at vertical)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">148</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1" target="_blank">Bottom View of Binary Tree</a><div class="sub">BFS + Map (Continuously update vertical)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">149</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-right-side-view/" target="_blank">Right / Left Side View of BT</a><div class="sub">Recursive depth checking if(level == ds.size())</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 199</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">150</td><td class="pname"><a href="https://leetcode.com/problems/symmetric-tree/" target="_blank">Symmetric Tree</a><div class="sub">Compare node1-&gt;left with node2-&gt;right</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 101</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">151</td><td class="pname"><a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/" target="_blank">Lowest Common Ancestor (LCA)</a><div class="sub">Return non-null child</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 236</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">152</td><td class="pname"><a href="https://leetcode.com/problems/serialize-and-deserialize-binary-tree/" target="_blank">Serialize and Deserialize Binary Tree</a><div class="sub">String stream and BFS</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 297</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 14 — BST -->
+<div class="section" id="s14">
+  <div class="sec-hdr">
+    <div class="sec-icon c14">🌲</div>
+    <h3>Binary Search Trees (BST)</h3>
+    <span class="sec-vol">Vol 1 · Step 14</span>
+    <span class="sec-cnt">8 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">153</td><td class="pname"><a href="https://leetcode.com/problems/search-in-a-binary-search-tree/" target="_blank">Search in a BST</a><div class="sub">Move left if &lt; val, right if &gt; val</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 700</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">154</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/minimum-element-in-bst/1" target="_blank">Find Min/Max in BST</a><div class="sub">Traverse absolute left/right</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">155</td><td class="pname"><a href="https://leetcode.com/problems/insert-into-a-binary-search-tree/" target="_blank">Insert a Node in BST</a><div class="sub">Find leaf position</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 701</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">156</td><td class="pname"><a href="https://leetcode.com/problems/delete-node-in-a-bst/" target="_blank">Delete a Node in BST</a><div class="sub">Reattach children logic</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 450</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">157</td><td class="pname"><a href="https://leetcode.com/problems/kth-smallest-element-in-a-bst/" target="_blank">Kth Smallest Element in BST</a><div class="sub">Inorder traversal is always sorted</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 230</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">158</td><td class="pname"><a href="https://leetcode.com/problems/validate-binary-search-tree/" target="_blank">Validate Binary Search Tree</a><div class="sub">Range passing [min, max]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 98</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">159</td><td class="pname"><a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/" target="_blank">LCA in BST</a><div class="sub">First point where branches split</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 235</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">160</td><td class="pname"><a href="https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/" target="_blank">Construct BST from Preorder</a><div class="sub">Upper bound limit approach</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1008</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 15 — GRAPHS -->
+<div class="section" id="s15">
+  <div class="sec-hdr">
+    <div class="sec-icon c15">🕸️</div>
+    <h3>Graphs</h3>
+    <span class="sec-vol">Vol 1 · Step 15</span>
+    <span class="sec-cnt">18 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">161</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1" target="_blank">BFS of Graph</a><div class="sub">Queue + Visited Array</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">162</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1" target="_blank">DFS of Graph</a><div class="sub">Recursion + Visited Array</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">163</td><td class="pname"><a href="https://leetcode.com/problems/number-of-provinces/" target="_blank">Number of Provinces</a><div class="sub">Connected Components via Traversal</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 547</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">164</td><td class="pname"><a href="https://leetcode.com/problems/rotting-oranges/" target="_blank">Rotten Oranges</a><div class="sub">Multi-source BFS</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 994</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">165</td><td class="pname"><a href="https://leetcode.com/problems/flood-fill/" target="_blank">Flood Fill Algorithm</a><div class="sub">Matrix DFS</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 733</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">166</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1" target="_blank">Detect Cycle in Undirected Graph (BFS)</a><div class="sub">Track parent in queue pairs</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">167</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1" target="_blank">Detect Cycle in Undirected Graph (DFS)</a><div class="sub">if (adjNode != parent)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">168</td><td class="pname"><a href="https://leetcode.com/problems/is-graph-bipartite/" target="_blank">Bipartite Graph Check</a><div class="sub">Coloring using 0 and 1</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 785</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">169</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1" target="_blank">Detect Cycle in Directed Graph</a><div class="sub">pathVisited array</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">170</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/topological-sort/1" target="_blank">Topological Sort</a><div class="sub">DFS Stack OR Kahn's Algo (Indegree)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">171</td><td class="pname"><a href="https://leetcode.com/problems/course-schedule/" target="_blank">Course Schedule I</a><div class="sub">Kahn's Algorithm / Cycle Detection</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 207</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">172</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-graph/1" target="_blank">Shortest Path in DAG</a><div class="sub">Topo Sort + Relaxation</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">173</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1" target="_blank">Dijkstra's Algorithm</a><div class="sub">Priority Queue (dist, node)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">174</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/1" target="_blank">Bellman Ford Algorithm</a><div class="sub">Relax all edges N-1 times</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">175</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1" target="_blank">Floyd Warshall</a><div class="sub">Multi-source shortest path matrix[i][j]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">176</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1" target="_blank">Minimum Spanning Tree (Prim's)</a><div class="sub">Priority Queue (wt, node)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">177</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/disjoint-set-union-find/1" target="_blank">Disjoint Set (Union Find)</a><div class="sub">Path Compression + Union by Rank/Size</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">178</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1" target="_blank">Kruskal's Algorithm</a><div class="sub">Sort edges + Disjoint Set</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 16 — DYNAMIC PROGRAMMING -->
+<div class="section" id="s16">
+  <div class="sec-hdr">
+    <div class="sec-icon c16">💡</div>
+    <h3>Dynamic Programming</h3>
+    <span class="sec-vol">Vol 1 · Step 16</span>
+    <span class="sec-cnt">16 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">179</td><td class="pname"><a href="https://leetcode.com/problems/climbing-stairs/" target="_blank">Climbing Stairs</a><div class="sub">Fibonacci mapping dp[i-1] + dp[i-2]</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 70</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">180</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/geek-jump/1" target="_blank">Frog Jump</a><div class="sub">1D DP minimization</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">181</td><td class="pname"><a href="https://leetcode.com/problems/house-robber/" target="_blank">House Robber</a><div class="sub">Pick / Non-Pick (Cannot pick adjacent)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 198</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">182</td><td class="pname"><a href="https://leetcode.com/problems/unique-paths/" target="_blank">Unique Paths</a><div class="sub">2D DP Grid traversal</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 62</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">183</td><td class="pname"><a href="https://leetcode.com/problems/minimum-path-sum/" target="_blank">Minimum Path Sum</a><div class="sub">2D DP Grid optimization</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 64</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">184</td><td class="pname"><a href="https://leetcode.com/problems/triangle/" target="_blank">Triangle</a><div class="sub">Bottom-Up 2D DP</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 120</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">185</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1" target="_blank">Subset Sum Equal to Target</a><div class="sub">2D DP Pick/Non-Pick</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">186</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1" target="_blank">0/1 Knapsack</a><div class="sub">Weight vs Value state DP</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">187</td><td class="pname"><a href="https://leetcode.com/problems/coin-change/" target="_blank">Coin Change (Min Coins)</a><div class="sub">Unbounded Knapsack</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 322</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">188</td><td class="pname"><a href="https://leetcode.com/problems/longest-common-subsequence/" target="_blank">Longest Common Subsequence (LCS)</a><div class="sub">String Matching DP dp[i][j]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1143</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">189</td><td class="pname"><a href="https://leetcode.com/problems/longest-palindromic-subsequence/" target="_blank">Longest Palindromic Subsequence</a><div class="sub">LCS of string and its reverse</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 516</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">190</td><td class="pname"><a href="https://leetcode.com/problems/edit-distance/" target="_blank">Edit Distance</a><div class="sub">Insert/Delete/Replace String DP</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 72</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">191</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank">Best Time to Buy/Sell Stock II</a><div class="sub">State: dp[ind][buy]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 122</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">192</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank">Best Time to Buy/Sell Stock III</a><div class="sub">State: dp[ind][buy][cap]</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 123</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">193</td><td class="pname"><a href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank">Longest Increasing Subsequence (LIS)</a><div class="sub">Nested loop DP OR Binary Search</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 300</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">194</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1" target="_blank">Matrix Chain Multiplication</a><div class="sub">Partition DP (i, k, j)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 17 — TRIES -->
+<div class="section" id="s17">
+  <div class="sec-hdr">
+    <div class="sec-icon c17">🔡</div>
+    <h3>Tries</h3>
+    <span class="sec-vol">Vol 1 · Step 17</span>
+    <span class="sec-cnt">4 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">195</td><td class="pname"><a href="https://leetcode.com/problems/implement-trie-prefix-tree/" target="_blank">Implement Trie (Prefix Tree)</a><div class="sub">Array of pointers TrieNode* links[26]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 208</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">196</td><td class="pname"><a href="https://www.naukri.com/code360/problems/implement-trie_1387095" target="_blank">Implement Trie II</a><div class="sub">Add countPrefix and countEndsWith</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat cs">Ninja</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">197</td><td class="pname"><a href="https://www.naukri.com/code360/problems/complete-string_2687860" target="_blank">Longest String with All Prefixes</a><div class="sub">DFS on Trie</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat cs">Ninja</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">198</td><td class="pname"><a href="https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/" target="_blank">Maximum XOR of Two Numbers</a><div class="sub">Bit-level Trie (0 and 1 pointers)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 421</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- ══════════ VOL 2 ══════════ -->
+
+<!-- SECTION 18 — ADVANCED STRINGS -->
+<div class="section" id="s18">
+  <div class="sec-hdr">
+    <div class="sec-icon c18">🧵</div>
+    <h3>Advanced Strings — Pattern Matching</h3>
+    <span class="sec-vol">Vol 2 · Step 18</span>
+    <span class="sec-cnt">6 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="hard"><td class="pnum">199</td><td class="pname"><a href="https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/" target="_blank">KMP Algorithm (LPS Array)</a><div class="sub">O(N+M) pattern matching / Longest Prefix Suffix</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 28</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">200</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/z-algorithm/1" target="_blank">Z-Algorithm</a><div class="sub">Z-array computation</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">201</td><td class="pname"><a href="https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/" target="_blank">Rabin-Karp Algorithm</a><div class="sub">Rolling Hash / Prime modulo</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 28</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">202</td><td class="pname"><a href="https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/" target="_blank">Minimum Add to Make Valid</a><div class="sub">Stack optimization</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 921</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">203</td><td class="pname"><a href="https://leetcode.com/problems/count-and-say/" target="_blank">Count and Say</a><div class="sub">String manipulation &amp; recursion</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 38</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">204</td><td class="pname"><a href="https://leetcode.com/problems/compare-version-numbers/" target="_blank">Compare Version Numbers</a><div class="sub">String parsing and stringstream</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 165</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 19 — ADVANCED LINKED LIST -->
+<div class="section" id="s19">
+  <div class="sec-hdr">
+    <div class="sec-icon c19">🔗</div>
+    <h3>Advanced Linked List — Doubly LL &amp; Flattening</h3>
+    <span class="sec-vol">Vol 2 · Step 19</span>
+    <span class="sec-cnt">6 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="easy"><td class="pnum">205</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/insert-a-node-in-doubly-linked-list/1" target="_blank">Insert in Doubly Linked List</a><div class="sub">Managing prev and next pointers</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">206</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/delete-node-in-doubly-linked-list/1" target="_blank">Delete in Doubly Linked List</a><div class="sub">Safe deletion without memory leaks</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">207</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/reverse-a-doubly-linked-list/1" target="_blank">Reverse a Doubly Linked List</a><div class="sub">Swapping prev and next at each node</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">208</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/find-pairs-with-given-sum-in-doubly-linked-list/1" target="_blank">Find Pairs with Given Sum in DLL</a><div class="sub">Two pointers (Head and Tail)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">209</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/remove-duplicates-from-a-sorted-doubly-linked-list/1" target="_blank">Remove Duplicates from Sorted DLL</a><div class="sub">Sequential checking</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">210</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/flattening-a-linked-list/1" target="_blank">Flatten a Linked List</a><div class="sub">Merge logic applied recursively</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 20 — ADVANCED STACK & QUEUE -->
+<div class="section" id="s20">
+  <div class="sec-hdr">
+    <div class="sec-icon c20">📚</div>
+    <h3>Advanced Stack &amp; Queue</h3>
+    <span class="sec-vol">Vol 2 · Step 20</span>
+    <span class="sec-cnt">8 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="hard"><td class="pnum">211</td><td class="pname"><a href="https://leetcode.com/problems/lru-cache/" target="_blank">LRU Cache</a><div class="sub">unordered_map + Doubly Linked List</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 146</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">212</td><td class="pname"><a href="https://leetcode.com/problems/lfu-cache/" target="_blank">LFU Cache</a><div class="sub">Maps of DLLs (freq -&gt; DLL)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 460</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">213</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/the-celebrity-problem/1" target="_blank">The Celebrity Problem</a><div class="sub">Stack elimination O(N)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">214</td><td class="pname"><a href="https://leetcode.com/problems/remove-k-digits/" target="_blank">Remove K Digits</a><div class="sub">Monotonic Increasing Stack</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 402</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">215</td><td class="pname"><a href="https://leetcode.com/problems/maximal-rectangle/" target="_blank">Maximal Rectangle</a><div class="sub">Apply "Largest Rectangle in Histogram" on rows</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 85</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">216</td><td class="pname"><a href="https://leetcode.com/problems/sum-of-subarray-minimums/" target="_blank">Sum of Subarray Minimums</a><div class="sub">Previous Less Element + Next Less Element</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 907</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">217</td><td class="pname"><a href="https://leetcode.com/problems/sum-of-subarray-ranges/" target="_blank">Sum of Subarray Ranges</a><div class="sub">Subarray Maxes - Subarray Mins</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 2104</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">218</td><td class="pname"><a href="https://leetcode.com/problems/asteroid-collision/" target="_blank">Asteroid Collision</a><div class="sub">Stack simulation</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 735</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 21 — ADVANCED SLIDING WINDOW -->
+<div class="section" id="s21">
+  <div class="sec-hdr">
+    <div class="sec-icon c21">🪟</div>
+    <h3>Advanced Sliding Window &amp; Two Pointers</h3>
+    <span class="sec-vol">Vol 2 · Step 21</span>
+    <span class="sec-cnt">5 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">219</td><td class="pname"><a href="https://leetcode.com/problems/binary-subarrays-with-sum/" target="_blank">Binary Subarrays with Sum</a><div class="sub">atMost(goal) - atMost(goal-1) pattern</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 930</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">220</td><td class="pname"><a href="https://leetcode.com/problems/count-number-of-nice-subarrays/" target="_blank">Count Number of Nice Subarrays</a><div class="sub">Odd numbers converted to 1, apply sum logic</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1248</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">221</td><td class="pname"><a href="https://leetcode.com/problems/subarrays-with-k-different-integers/" target="_blank">Subarrays with K Different Integers</a><div class="sub">atMost(K) - atMost(K-1)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 992</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">222</td><td class="pname"><a href="https://leetcode.com/problems/minimum-window-substring/" target="_blank">Minimum Window Substring</a><div class="sub">Hash map tracking required chars + Two Pointers</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 76</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">223</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/minimum-window-subsequence/1" target="_blank">Minimum Window Subsequence</a><div class="sub">Two pointer string matching</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 22 — ADVANCED GREEDY & HEAPS -->
+<div class="section" id="s22">
+  <div class="sec-hdr">
+    <div class="sec-icon c22">⚡</div>
+    <h3>Advanced Greedy &amp; Heaps</h3>
+    <span class="sec-vol">Vol 2 · Step 22</span>
+    <span class="sec-cnt">7 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">224</td><td class="pname"><a href="https://leetcode.com/problems/jump-game/" target="_blank">Jump Game I</a><div class="sub">Track max reachable index</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 55</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">225</td><td class="pname"><a href="https://leetcode.com/problems/jump-game-ii/" target="_blank">Jump Game II (Min Jumps)</a><div class="sub">Track current jump end and farthest jump</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 45</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">226</td><td class="pname"><a href="https://leetcode.com/problems/insert-interval/" target="_blank">Insert Interval</a><div class="sub">Linear scan, merge overlaps</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 57</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">227</td><td class="pname"><a href="https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/" target="_blank">Minimum Number of Arrows</a><div class="sub">Sort by end time</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 452</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">228</td><td class="pname"><a href="https://leetcode.com/problems/task-scheduler/" target="_blank">Task Scheduler</a><div class="sub">Max-Heap + Queue for cooldown</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 621</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">229</td><td class="pname"><a href="https://leetcode.com/problems/hand-of-straights/" target="_blank">Hand of Straights</a><div class="sub">Map/Min-Heap grouping by size W</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 846</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">230</td><td class="pname"><a href="https://leetcode.com/problems/design-twitter/" target="_blank">Design Twitter</a><div class="sub">Merge K sorted lists logic applied to tweets</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 355</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 23 — ADVANCED TREES -->
+<div class="section" id="s23">
+  <div class="sec-hdr">
+    <div class="sec-icon c23">🌳</div>
+    <h3>Advanced Trees — Properties, Morris, Structure</h3>
+    <span class="sec-vol">Vol 2 · Step 23</span>
+    <span class="sec-cnt">11 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">231</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/children-sum-parent/1" target="_blank">Children Sum Property</a><div class="sub">Modify tree values going down, correct going up</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">232</td><td class="pname"><a href="https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/" target="_blank">Nodes at Distance K</a><div class="sub">Parent Pointers mapping + BFS</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 863</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">233</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/burning-tree/1" target="_blank">Minimum Time to Burn Tree</a><div class="sub">Parent Pointers + Multi-source BFS</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">234</td><td class="pname"><a href="https://leetcode.com/problems/count-complete-tree-nodes/" target="_blank">Count Complete Tree Nodes</a><div class="sub">O(log²N) using left/right height comparison</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 222</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">235</td><td class="pname"><a href="https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" target="_blank">Construct BT from Inorder &amp; Preorder</a><div class="sub">Hash map for Inorder indices + Recursion</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 105</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">236</td><td class="pname"><a href="https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/" target="_blank">Construct BT from Inorder &amp; Postorder</a><div class="sub">Postorder root is at the end</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 106</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">237</td><td class="pname"><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/" target="_blank">Morris Traversal (Inorder)</a><div class="sub">O(1) space using Threaded Binary Tree logic</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 94</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">238</td><td class="pname"><a href="https://leetcode.com/problems/flatten-binary-tree-to-linked-list/" target="_blank">Flatten BT to Linked List</a><div class="sub">Reverse Postorder traversal trick</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 114</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">239</td><td class="pname"><a href="https://leetcode.com/problems/binary-search-tree-iterator/" target="_blank">BST Iterator</a><div class="sub">Stack pushing left boundaries</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 173</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">240</td><td class="pname"><a href="https://leetcode.com/problems/recover-binary-search-tree/" target="_blank">Recover BST (Two Swapped Nodes)</a><div class="sub">Track prev, first, middle, last in Inorder</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 99</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">241</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/largest-bst/1" target="_blank">Largest BST in Binary Tree</a><div class="sub">Postorder returning (size, min, max)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 24 — ADVANCED GRAPHS -->
+<div class="section" id="s24">
+  <div class="sec-hdr">
+    <div class="sec-icon c24">🕸️</div>
+    <h3>Advanced Graphs — Shortest Paths, SCC, MST</h3>
+    <span class="sec-vol">Vol 2 · Step 24</span>
+    <span class="sec-cnt">12 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="hard"><td class="pnum">242</td><td class="pname"><a href="https://leetcode.com/problems/word-ladder/" target="_blank">Word Ladder I</a><div class="sub">BFS with char replacement a to z</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 127</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">243</td><td class="pname"><a href="https://leetcode.com/problems/word-ladder-ii/" target="_blank">Word Ladder II</a><div class="sub">BFS for shortest path + DFS to backtrack</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 126</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">244</td><td class="pname"><a href="https://leetcode.com/problems/network-delay-time/" target="_blank">Network Delay Time</a><div class="sub">Dijkstra's Algorithm</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 743</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">245</td><td class="pname"><a href="https://leetcode.com/problems/cheapest-flights-within-k-stops/" target="_blank">Cheapest Flights within K Stops</a><div class="sub">Queue (stops, node, dist)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 787</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">246</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/minimum-multiplications-to-reach-end/1" target="_blank">Minimum Multiplications to Reach End</a><div class="sub">Dijkstra with modulo states</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">247</td><td class="pname"><a href="https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/" target="_blank">Number of Ways to Arrive at Destination</a><div class="sub">Dijkstra tracking ways[]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1976</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">248</td><td class="pname"><a href="https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/" target="_blank">Find City with Smallest Neighbors</a><div class="sub">Floyd Warshall</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1334</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">249</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1" target="_blank">Strongly Connected Components (Kosaraju's)</a><div class="sub">Sort by finish time, reverse graph, DFS</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">250</td><td class="pname"><a href="https://leetcode.com/problems/critical-connections-in-a-network/" target="_blank">Bridges in Graph (Tarjan's)</a><div class="sub">tin[] and low[] time arrays</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 1192</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">251</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/articulation-point-1/1" target="_blank">Articulation Points</a><div class="sub">low[it] &gt;= tin[node] logic</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">252</td><td class="pname"><a href="https://leetcode.com/problems/making-a-large-island/" target="_blank">Making a Large Island</a><div class="sub">Disjoint Set, change one 0 to 1</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 827</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">253</td><td class="pname"><a href="https://leetcode.com/problems/swim-in-rising-water/" target="_blank">Swim in Rising Water</a><div class="sub">Min-Heap / Dijkstra on Grid</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 778</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- SECTION 25 — COMPLETE DYNAMIC PROGRAMMING -->
+<div class="section" id="s25">
+  <div class="sec-hdr">
+    <div class="sec-icon c25">💡</div>
+    <h3>Complete Dynamic Programming</h3>
+    <span class="sec-vol">Vol 2 · Step 25</span>
+    <span class="sec-cnt">31 problems</span>
+  </div>
+  <table class="ptbl"><thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Platform</th><th>Done</th></tr></thead><tbody>
+    <tr class="prob-row" data-d="medium"><td class="pnum">254</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/geeks-training/1" target="_blank">Ninja's Training</a><div class="sub">2D DP dp[day][last_task]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">255</td><td class="pname"><a href="https://leetcode.com/problems/minimum-falling-path-sum/" target="_blank">Minimum Falling Path Sum</a><div class="sub">Grid DP starting from any cell in row 0</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 931</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">256</td><td class="pname"><a href="https://leetcode.com/problems/partition-equal-subset-sum/" target="_blank">Partition Equal Subset Sum</a><div class="sub">Target Sum = Total/2</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 416</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">257</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/perfect-sum-problem5633/1" target="_blank">Count Subsets with Sum K</a><div class="sub">Handle zeroes carefully</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">258</td><td class="pname"><a href="https://leetcode.com/problems/target-sum/" target="_blank">Target Sum</a><div class="sub">Math transformation to Subset Sum</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 494</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">259</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/knapsack-with-duplicate-items4201/1" target="_blank">Unbounded Knapsack</a><div class="sub">Same item picked multiple times</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">260</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/rod-cutting0840/1" target="_blank">Rod Cutting Problem</a><div class="sub">1D Unbounded Knapsack</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">261</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/longest-common-substring1452/1" target="_blank">Longest Common Substring</a><div class="sub">Reset to 0 when chars don't match</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">262</td><td class="pname"><a href="https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/" target="_blank">Minimum Insertions to Make Palindrome</a><div class="sub">Len - Longest Palindromic Subsequence</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 1312</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">263</td><td class="pname"><a href="https://leetcode.com/problems/distinct-subsequences/" target="_blank">Distinct Subsequences</a><div class="sub">String Matching DP dp[i][j] = dp[i-1][j-1] + dp[i-1][j]</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 115</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">264</td><td class="pname"><a href="https://leetcode.com/problems/wildcard-matching/" target="_blank">Wildcard Matching</a><div class="sub">Handle * and ? logic</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 44</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="easy"><td class="pnum">265</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank">Stock Buy Sell I (1 Transaction)</a><div class="sub">Track min price</div></td><td><span class="badge easy">Easy</span></td><td><span class="plat lc">LC 121</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">266</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank">Stock Buy Sell II (Infinite Transactions)</a><div class="sub">Infinite transactions greedy/DP</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 122</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">267</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank">Stock Buy Sell III (At Most 2)</a><div class="sub">At most 2 transactions</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 123</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">268</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank">Stock Buy Sell IV (At Most K)</a><div class="sub">At most K transactions</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 188</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">269</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank">Stock Buy Sell with Cooldown</a><div class="sub">Skip a day after selling</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 309</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">270</td><td class="pname"><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/" target="_blank">Stock Buy Sell with Transaction Fee</a><div class="sub">Subtract fee on sell</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 714</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">271</td><td class="pname"><a href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank">LIS — Binary Search O(N log N)</a><div class="sub">Binary Search std::lower_bound O(N log N)</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 300</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">272</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/printing-longest-increasing-subsequence/1" target="_blank">Print LIS</a><div class="sub">Track hash[] array of previous indices</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">273</td><td class="pname"><a href="https://leetcode.com/problems/largest-divisible-subset/" target="_blank">Largest Divisible Subset</a><div class="sub">Sort array + LIS logic</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 368</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">274</td><td class="pname"><a href="https://leetcode.com/problems/longest-string-chain/" target="_blank">Longest String Chain</a><div class="sub">Sort by length + LIS logic</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1048</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">275</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/longest-bitonic-subsequence0824/1" target="_blank">Longest Bitonic Subsequence</a><div class="sub">LIS(left) + LIS(right) - 1</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">276</td><td class="pname"><a href="https://leetcode.com/problems/number-of-longest-increasing-subsequence/" target="_blank">Number of Longest Increasing Subsequences</a><div class="sub">Track count[] alongside dp[]</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 673</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">277</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1" target="_blank">Matrix Chain Multiplication</a><div class="sub">Partition DP dp[i][j] = min(dp[i][k] + dp[k+1][j] + cost)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">278</td><td class="pname"><a href="https://leetcode.com/problems/minimum-cost-to-cut-a-stick/" target="_blank">Minimum Cost to Cut a Stick</a><div class="sub">Sort cuts + MCM pattern</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 1547</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">279</td><td class="pname"><a href="https://leetcode.com/problems/burst-balloons/" target="_blank">Burst Balloons</a><div class="sub">Think in reverse (last balloon to burst)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 312</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">280</td><td class="pname"><a href="https://www.geeksforgeeks.org/problems/boolean-parenthesization5610/1" target="_blank">Evaluate Boolean Expression to True</a><div class="sub">3D DP (i, j, isTrue)</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat gfg">GFG</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="hard"><td class="pnum">281</td><td class="pname"><a href="https://leetcode.com/problems/palindrome-partitioning-ii/" target="_blank">Palindrome Partitioning II (Min Cuts)</a><div class="sub">Front partition DP</div></td><td><span class="badge hard">Hard</span></td><td><span class="plat lc">LC 132</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">282</td><td class="pname"><a href="https://leetcode.com/problems/partition-array-for-maximum-sum/" target="_blank">Partition Array for Maximum Sum</a><div class="sub">Front partition DP with limit K</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 1043</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">283</td><td class="pname"><a href="https://leetcode.com/problems/maximal-square/" target="_blank">Maximal Square</a><div class="sub">min(top, left, top-left) + 1</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 221</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+    <tr class="prob-row" data-d="medium"><td class="pnum">284</td><td class="pname"><a href="https://leetcode.com/problems/coin-change-ii/" target="_blank">Coin Change II (Count Ways)</a><div class="sub">Unbounded Knapsack variant</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC 518</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
+  </tbody></table>
+</div>
+
+</main>
+
+<button id="scrollBtn" onclick="document.getElementById('main').scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+
+<script>
+const TOTAL = 284;
+const KEY = 'striver_a2z_v3';
+
+// Load
+window.addEventListener('load', () => {
+  const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+  const cbs = document.querySelectorAll('.done-cb');
+  cbs.forEach((c, i) => { if(saved[i]) c.checked = true; });
+  upd();
+});
+
+function upd() {
+  const cbs = [...document.querySelectorAll('.done-cb')];
+  const done = cbs.filter(c => c.checked).length;
+  const pct = Math.round(done / TOTAL * 100);
+  document.getElementById('pFill').style.width = pct + '%';
+  document.getElementById('pctLbl').textContent = pct + '%';
+  document.getElementById('sDone').textContent = done;
+  localStorage.setItem(KEY, JSON.stringify(cbs.map(c => c.checked)));
+}
+
+let activeF = 'all';
+function setF(f) {
+  activeF = f;
+  ['all','easy','medium','hard','done'].forEach(x => {
+    document.getElementById('f'+x.charAt(0)).classList.toggle('active', x === f);
+  });
+  filterAll();
+}
+
+function filterAll() {
+  const q = document.getElementById('srch').value.toLowerCase();
+  document.querySelectorAll('.prob-row').forEach(row => {
+    const name = row.querySelector('.pname').textContent.toLowerCase();
+    const diff = row.dataset.d;
+    const done = row.querySelector('.done-cb').checked;
+    const matchQ = !q || name.includes(q);
+    const matchF = activeF === 'all' ||
+      (activeF === 'done' ? done : diff === activeF);
+    row.style.display = matchQ && matchF ? '' : 'none';
+  });
+}
+
+function go(id) {
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+const main = document.getElementById('main');
+main.addEventListener('scroll', () => {
+  document.getElementById('scrollBtn').classList.toggle('vis', main.scrollTop > 300);
+});
+</script>
+</body>
+</html>
