@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const HISTORY_LIMIT = 100;
+let mongoConnectionPromise = null;
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(__dirname));
@@ -82,18 +83,51 @@ function cleanCompletedProblemIds(completedProblemIds) {
   )];
 }
 
-function requireMongo(req, res, next) {
-  if (mongoose.connection.readyState !== 1) {
-    return res.status(503).json({ error: 'MongoDB is not connected. Check MONGODB_URI in .env.' });
+async function connectMongo() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
   }
-  next();
+
+  if (!MONGODB_URI) {
+    throw new Error('MONGODB_URI is not set.');
+  }
+
+  if (!mongoConnectionPromise) {
+    mongoConnectionPromise = mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000
+    }).catch(error => {
+      mongoConnectionPromise = null;
+      throw error;
+    });
+  }
+
+  await mongoConnectionPromise;
+  return mongoose.connection;
 }
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    ok: true,
-    mongoConnected: mongoose.connection.readyState === 1
-  });
+async function requireMongo(req, res, next) {
+  try {
+    await connectMongo();
+    next();
+  } catch (error) {
+    res.status(503).json({
+      error: 'MongoDB is not connected. Check MONGODB_URI and MongoDB Atlas network access.',
+      details: error.message
+    });
+  }
+}
+
+app.get('/api/health', async (req, res) => {
+  try {
+    await connectMongo();
+    res.json({ ok: true, mongoConnected: true });
+  } catch (error) {
+    res.json({
+      ok: true,
+      mongoConnected: false,
+      reason: error.message
+    });
+  }
 });
 
 app.post('/api/login', requireMongo, async (req, res, next) => {
@@ -226,12 +260,16 @@ async function start() {
     return;
   }
 
-  mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 })
+  connectMongo()
     .then(() => console.log('MongoDB connected'))
     .catch(error => console.error('MongoDB connection failed:', error.message));
 }
 
-start().catch(error => {
-  console.error('Failed to start server:', error);
-  process.exit(1);
-});
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  start().catch(error => {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  });
+}
