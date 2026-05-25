@@ -4,7 +4,7 @@ A static web tracker for the Striver A2Z DSA Sheet with 284 problems, grouped by
 
 ## Features
 
-- 284 DSA problems with LeetCode and GFG links
+- 475 DSA problems with LeetCode and GFG links
 - Topic-wise navigation
 - Search by problem name
 - Filter by difficulty or completed status
