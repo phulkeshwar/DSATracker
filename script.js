@@ -1,4 +1,4 @@
-const TOTAL = 284;
+const TOTAL = 475;
 const ACTIVE_USER_KEY = 'striver_a2z_active_user';
 const LEGACY_BOOL_KEY = 'striver_a2z_v3';
 const LEGACY_ID_KEY = 'striver_a2z_v4';
