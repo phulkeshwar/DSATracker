@@ -1,43 +1,125 @@
 # Striver A2Z DSA Tracker
 
-A static web tracker for the Striver A2Z DSA Sheet with 284 problems, grouped by topic and difficulty.
+A full-stack web app to track your progress through the **Striver A2Z DSA Sheet** — 475 problems across 18 steps, with secure authentication and cloud-synced progress.
 
 ## Features
 
-- 475 DSA problems with LeetCode and GFG links
-- Topic-wise navigation
-- Search by problem name
-- Filter by difficulty or completed status
-- Progress bar and completed count
-- Username-only login
-- Persistent checkbox progress and progress history using MongoDB
-- Browser `localStorage` fallback when the backend is unavailable
+- **475 DSA problems** with direct LeetCode & GFG links, organized into 18 topic-based steps
+- **Secure authentication** — register and login with username + password (bcrypt hashed)
+- **JWT session tokens** — stay logged in for 30 days, auto-login on page refresh
+- **Legacy account migration** — existing users without passwords are prompted to set one
+- **Cloud-synced progress** — checkboxes saved to MongoDB in real-time with debounced writes
+- **Progress history** — each save creates a snapshot (up to 100 per user)
+- **Offline fallback** — progress saved to `localStorage` when the server is unavailable
+- **Difficulty stats** — live counts for Easy, Medium, Hard, and Done problems
+- **Search & filter** — search by problem name, filter by difficulty or completion status
+- **Sidebar navigation** — jump to any of the 18 steps instantly
+- **Dark theme** — premium dark UI with JetBrains Mono + Syne fonts and smooth animations
+- **Responsive** — works on desktop and mobile
 
-## How to Use
+## Tech Stack
 
-Install dependencies:
+| Layer      | Technology                            |
+|------------|---------------------------------------|
+| Frontend   | HTML, Vanilla CSS, Vanilla JavaScript |
+| Backend    | Node.js, Express.js                   |
+| Database   | MongoDB (via Mongoose)                |
+| Auth       | bcryptjs (hashing), jsonwebtoken (JWT)|
+| Deployment | Vercel (serverless)                   |
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18+
+- A [MongoDB Atlas](https://www.mongodb.com/atlas) cluster (or local MongoDB)
+
+### Installation
 
 ```bash
+git clone https://github.com/phulkeshwar/DSA.git
+cd DSA
 npm install
 ```
 
-Create a `.env` file from `.env.example` and set `MONGODB_URI`.
+### Environment Variables
 
-Start the app:
+Create a `.env` file in the project root:
+
+```env
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/
+PORT=3001
+JWT_SECRET=your_secret_key_here
+```
+
+| Variable      | Description                                      |
+|---------------|--------------------------------------------------|
+| `MONGODB_URI` | MongoDB connection string                        |
+| `PORT`        | Server port (default: `3000`)                    |
+| `JWT_SECRET`  | Secret key for signing JWT tokens (change this!) |
+
+### Run Locally
 
 ```bash
+# Development (auto-restart on file changes)
+npm run dev
+
+# Production
 npm start
 ```
 
-Open `http://localhost:3000` in your browser. Enter a username to create or access that account, then mark problems as done using the checkbox in the `Done` column.
+Open **http://localhost:3001** in your browser.
 
-## Project Files
+## API Endpoints
 
-- `index.html` - Main tracker page
-- `script.js` - Login, progress saving, filtering, search, and navigation logic
-- `server.js` - Express API and MongoDB persistence
-- `striverDSA` - Older/alternate copy of the tracker page
+### Authentication
 
-## Notes
+| Method | Endpoint         | Description                                    | Auth Required |
+|--------|------------------|------------------------------------------------|---------------|
+| POST   | `/api/register`  | Create a new account (username + password)     | No            |
+| POST   | `/api/login`     | Login with username + password, returns JWT    | No            |
+| POST   | `/api/migrate`   | Set password for legacy accounts (no password) | No            |
+| GET    | `/api/me`        | Verify JWT token, return user data             | Yes           |
 
-Progress is stored in MongoDB per username. Each progress save also appends a history snapshot, capped at the most recent 100 updates per user.
+### Progress
+
+| Method | Endpoint                          | Description                     | Auth Required |
+|--------|-----------------------------------|---------------------------------|---------------|
+| GET    | `/api/users/:username/progress`   | Get user's solved problems      | Yes           |
+| PUT    | `/api/users/:username/progress`   | Save solved problems + snapshot | Yes           |
+
+### Health
+
+| Method | Endpoint       | Description              | Auth Required |
+|--------|----------------|--------------------------|---------------|
+| GET    | `/api/health`  | Check server & DB status | No            |
+
+## Project Structure
+
+```
+├── index.html      # Main tracker page (HTML + inline CSS)
+├── script.js       # Frontend auth, progress sync, filtering, search
+├── server.js       # Express API, MongoDB models, auth middleware
+├── package.json    # Dependencies and scripts
+├── vercel.json     # Vercel deployment config
+├── .env            # Environment variables (not committed)
+└── .gitignore      # Git ignore rules
+```
+
+## Authentication Flow
+
+1. **New users** → Register tab → enter username + password → account created → auto-login
+2. **Returning users** → Login tab → enter credentials → JWT issued → auto-login
+3. **Legacy users** (created before passwords) → Login → prompted to set a password → progress preserved
+4. **Page refresh** → saved JWT verified via `/api/me` → auto-login without re-entering credentials
+5. **Logout** → clears JWT + username from `localStorage`
+
+## Deployment
+
+The app is configured for **Vercel** deployment via `vercel.json`. Push to your connected GitHub repo and Vercel will auto-deploy.
+
+Make sure to set environment variables (`MONGODB_URI`, `JWT_SECRET`) in your Vercel project settings.
+
+## License
+
+This project is for personal use and educational purposes.
