@@ -52,7 +52,8 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true
+      required: false,
+      default: null
     },
     completedProblemIds: {
       type: [String],
@@ -233,14 +234,23 @@ app.post('/api/login', requireMongo, async (req, res, next) => {
       return res.status(400).json({ error: usernameError });
     }
 
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      return res.status(400).json({ error: passwordError });
-    }
-
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(401).json({ error: 'Invalid username or password.' });
+    }
+
+    // Legacy user without password — prompt them to set one
+    if (!user.password) {
+      return res.status(409).json({
+        error: 'This account was created before passwords were required. Please set a password.',
+        needsMigration: true,
+        username: user.username
+      });
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return res.status(400).json({ error: passwordError });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -249,6 +259,51 @@ app.post('/api/login', requireMongo, async (req, res, next) => {
     }
 
     // Update last login
+    user.lastLoginAt = new Date();
+    await user.save();
+
+    const token = generateToken(user);
+
+    res.json({
+      token,
+      username: user.username,
+      displayName: user.displayName,
+      completedProblemIds: user.completedProblemIds,
+      doneCount: user.completedProblemIds.length
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ── MIGRATE LEGACY USER (set password for accounts without one) ──
+app.post('/api/migrate', requireMongo, async (req, res, next) => {
+  try {
+    const displayName = String(req.body.username || '').trim();
+    const username = normalizeUsername(displayName);
+    const password = String(req.body.password || '');
+
+    const usernameError = validateUsername(username);
+    if (usernameError) {
+      return res.status(400).json({ error: usernameError });
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return res.status(400).json({ error: passwordError });
+    }
+
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // Only allow migration for users without a password
+    if (user.password) {
+      return res.status(400).json({ error: 'This account already has a password. Please log in normally.' });
+    }
+
+    user.password = await bcrypt.hash(password, SALT_ROUNDS);
     user.lastLoginAt = new Date();
     await user.save();
 
