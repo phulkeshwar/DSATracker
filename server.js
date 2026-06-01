@@ -3,11 +3,15 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_change_me';
 const HISTORY_LIMIT = 100;
+const SALT_ROUNDS = 10;
 let mongoConnectionPromise = null;
 
 app.use(express.json({ limit: '1mb' }));
@@ -46,6 +50,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    password: {
+      type: String,
+      required: true
+    },
     completedProblemIds: {
       type: [String],
       default: []
@@ -74,6 +82,13 @@ function validateUsername(username) {
   return '';
 }
 
+function validatePassword(password) {
+  if (!password) return 'Password is required.';
+  if (password.length < 6) return 'Password must be at least 6 characters.';
+  if (password.length > 128) return 'Password must be 128 characters or fewer.';
+  return '';
+}
+
 function cleanCompletedProblemIds(completedProblemIds) {
   if (!Array.isArray(completedProblemIds)) return [];
   return [...new Set(
@@ -81,6 +96,14 @@ function cleanCompletedProblemIds(completedProblemIds) {
       .map(id => String(id || '').trim())
       .filter(Boolean)
   )];
+}
+
+function generateToken(user) {
+  return jwt.sign(
+    { userId: user._id, username: user.username },
+    JWT_SECRET,
+    { expiresIn: '30d' }
+  );
 }
 
 async function connectMongo() {
@@ -117,6 +140,23 @@ async function requireMongo(req, res, next) {
   }
 }
 
+// JWT authentication middleware
+function requireAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Authentication required. Please log in.' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Session expired. Please log in again.' });
+  }
+}
+
 app.get('/api/health', async (req, res) => {
   try {
     await connectMongo();
@@ -130,50 +170,108 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
+// ── REGISTER ──
+app.post('/api/register', requireMongo, async (req, res, next) => {
+  try {
+    const displayName = String(req.body.username || '').trim();
+    const username = normalizeUsername(displayName);
+    const password = String(req.body.password || '');
+
+    const usernameError = validateUsername(username);
+    if (usernameError) {
+      return res.status(400).json({ error: usernameError });
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return res.status(400).json({ error: passwordError });
+    }
+
+    // Check if username already exists
+    const existingUser = await User.findOne({ username }).lean();
+    if (existingUser) {
+      return res.status(409).json({ error: 'Username already taken. Try a different one.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+    const user = await User.create({
+      username,
+      displayName,
+      password: hashedPassword,
+      completedProblemIds: [],
+      history: [],
+      lastLoginAt: new Date()
+    });
+
+    const token = generateToken(user);
+
+    res.status(201).json({
+      token,
+      username: user.username,
+      displayName: user.displayName,
+      completedProblemIds: user.completedProblemIds,
+      doneCount: user.completedProblemIds.length
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ error: 'Username already taken. Try a different one.' });
+    }
+    next(error);
+  }
+});
+
+// ── LOGIN ──
 app.post('/api/login', requireMongo, async (req, res, next) => {
   try {
     const displayName = String(req.body.username || '').trim();
     const username = normalizeUsername(displayName);
-    const validationError = validateUsername(username);
+    const password = String(req.body.password || '');
 
-    if (validationError) {
-      return res.status(400).json({ error: validationError });
+    const usernameError = validateUsername(username);
+    if (usernameError) {
+      return res.status(400).json({ error: usernameError });
     }
 
-    let user = await User.findOneAndUpdate(
-      { username },
-      {
-        $set: {
-          displayName,
-          lastLoginAt: new Date()
-        }
-      },
-      { new: true }
-    ).lean();
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return res.status(400).json({ error: passwordError });
+    }
 
+    const user = await User.findOne({ username });
     if (!user) {
-      try {
-        user = await User.create({
-          username,
-          displayName,
-          completedProblemIds: [],
-          history: [],
-          lastLoginAt: new Date()
-        });
-        user = user.toObject();
-      } catch (error) {
-        if (error.code !== 11000) throw error;
-        user = await User.findOneAndUpdate(
-          { username },
-          {
-            $set: {
-              displayName,
-              lastLoginAt: new Date()
-            }
-          },
-          { new: true }
-        ).lean();
-      }
+      return res.status(401).json({ error: 'Invalid username or password.' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid username or password.' });
+    }
+
+    // Update last login
+    user.lastLoginAt = new Date();
+    await user.save();
+
+    const token = generateToken(user);
+
+    res.json({
+      token,
+      username: user.username,
+      displayName: user.displayName,
+      completedProblemIds: user.completedProblemIds,
+      doneCount: user.completedProblemIds.length
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ── VERIFY TOKEN (for auto-login on page refresh) ──
+app.get('/api/me', requireMongo, requireAuth, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ username: req.user.username }).lean();
+    if (!user) {
+      return res.status(401).json({ error: 'User not found.' });
     }
 
     res.json({
@@ -187,13 +285,18 @@ app.post('/api/login', requireMongo, async (req, res, next) => {
   }
 });
 
-app.get('/api/users/:username/progress', requireMongo, async (req, res, next) => {
+app.get('/api/users/:username/progress', requireMongo, requireAuth, async (req, res, next) => {
   try {
     const username = normalizeUsername(req.params.username);
     const validationError = validateUsername(username);
 
     if (validationError) {
       return res.status(400).json({ error: validationError });
+    }
+
+    // Users can only access their own progress
+    if (username !== req.user.username) {
+      return res.status(403).json({ error: 'Access denied.' });
     }
 
     const user = await User.findOne({ username }).lean();
@@ -213,13 +316,18 @@ app.get('/api/users/:username/progress', requireMongo, async (req, res, next) =>
   }
 });
 
-app.put('/api/users/:username/progress', requireMongo, async (req, res, next) => {
+app.put('/api/users/:username/progress', requireMongo, requireAuth, async (req, res, next) => {
   try {
     const username = normalizeUsername(req.params.username);
     const validationError = validateUsername(username);
 
     if (validationError) {
       return res.status(400).json({ error: validationError });
+    }
+
+    // Users can only update their own progress
+    if (username !== req.user.username) {
+      return res.status(403).json({ error: 'Access denied.' });
     }
 
     const completedProblemIds = cleanCompletedProblemIds(req.body.completedProblemIds);
@@ -233,7 +341,6 @@ app.put('/api/users/:username/progress', requireMongo, async (req, res, next) =>
       { username },
       {
         $set: {
-          displayName: req.params.username,
           completedProblemIds
         },
         $push: {
@@ -243,8 +350,12 @@ app.put('/api/users/:username/progress', requireMongo, async (req, res, next) =>
           }
         }
       },
-      { new: true, upsert: true }
+      { new: true }
     ).lean();
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
 
     res.json({
       username: user.username,
