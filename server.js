@@ -16,9 +16,11 @@ const HISTORY_LIMIT = 100;
 const SALT_ROUNDS = 10;
 let mongoConnectionPromise = null;
 
-// Warn if using insecure JWT secret in production
-if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'fallback_secret_change_me')) {
-  console.warn('WARNING: JWT_SECRET is not secure or missing in production environment!');
+// Enforce strict security settings in production
+if (process.env.NODE_ENV === 'production') {
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'fallback_secret_change_me') {
+    throw new Error('CRITICAL SECURITY ERROR: JWT_SECRET environment variable must be set to a secure, unique string in a production environment.');
+  }
 }
 
 // Enable Helmet for security headers (disable CSP to prevent font and icon blockages)
