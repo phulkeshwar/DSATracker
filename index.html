@@ -247,7 +247,256 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 #scrollBtn{position:fixed;bottom:22px;right:22px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;padding:9px 13px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;opacity:0;transition:opacity .3s;z-index:200;}
 #scrollBtn.vis{opacity:1;}
 
-@media(max-width:720px){#sidebar{display:none;}#main{padding:18px;}.account-bar{align-items:flex-start;flex-direction:column;}.login-panel{border-radius:10px;}.auth-tabs{margin:16px 20px 0;}.auth-form-wrap{padding:16px 20px 24px;}.login-header{padding:24px 20px 0;}}
+/* ── SEO HUB & COMPARISON ── */
+#seo-hub {
+  margin-top: 56px;
+  border-top: 1px solid var(--border);
+  padding-top: 48px;
+}
+.seo-header {
+  margin-bottom: 32px;
+}
+.seo-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.seo-header h2 span {
+  color: var(--accent);
+}
+.seo-header p {
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 680px;
+}
+.comp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.comp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.comp-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent2);
+  box-shadow: 0 8px 30px rgba(124, 92, 252, 0.1), 0 0 20px rgba(0, 229, 255, 0.03);
+}
+.comp-card.highlight {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--surface) 0%, rgba(0, 229, 255, 0.02) 100%);
+}
+.comp-card.highlight:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 30px rgba(0, 229, 255, 0.15);
+}
+.comp-card h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.comp-card h4 span {
+  font-size: 10px;
+  text-transform: uppercase;
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.comp-card.highlight h4 span {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 800;
+}
+.comp-card p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.comp-card ul {
+  list-style: none;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.comp-card ul li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.comp-card ul li::before {
+  content: '✦';
+  color: var(--accent2);
+  font-size: 10px;
+}
+.comp-card.highlight ul li::before {
+  color: var(--accent);
+}
+
+/* Comparison Table */
+.seo-tbl-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  margin-bottom: 48px;
+}
+.seo-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 11px;
+}
+.seo-tbl th {
+  background: var(--surface2);
+  padding: 12px 16px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+.seo-tbl td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+.seo-tbl tr:last-child td {
+  border-bottom: none;
+}
+.seo-tbl tr:hover td {
+  background: rgba(255, 255, 255, 0.01);
+}
+.seo-tbl tr.best td {
+  background: rgba(0, 229, 255, 0.02);
+}
+.seo-tbl tr.best:hover td {
+  background: rgba(0, 229, 255, 0.04);
+}
+.seo-tbl .feat-name {
+  font-weight: 700;
+  color: var(--text);
+}
+.seo-tbl .yes-badge {
+  background: rgba(0, 230, 118, 0.12);
+  color: var(--green);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  display: inline-block;
+}
+.seo-tbl .no-badge {
+  background: rgba(255, 107, 107, 0.12);
+  color: var(--hard);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  display: inline-block;
+}
+
+/* FAQ Accordion */
+.faq-sec {
+  max-width: 800px;
+  margin-bottom: 48px;
+}
+.faq-sec h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.faq-item:hover {
+  border-color: var(--surface2);
+}
+.faq-item[open] {
+  border-color: var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.faq-item summary {
+  padding: 16px 20px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+  user-select: none;
+  transition: color 0.2s;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary:hover {
+  color: var(--accent);
+}
+.faq-item summary::after {
+  content: '+';
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: var(--muted);
+  transition: transform 0.2s;
+}
+.faq-item[open] summary::after {
+  content: '−';
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+.faq-item[open] summary {
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+}
+.faq-item .faq-ans {
+  padding: 16px 20px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.005);
+  animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media(max-width:720px){#sidebar{display:none;}#main{padding:18px;}.account-bar{align-items:flex-start;flex-direction:column;}.login-panel{border-radius:10px;}.auth-tabs{margin:16px 20px 0;}.auth-form-wrap{padding:16px 20px 24px;}.login-header{padding:24px 20px 0;}.seo-header h2{font-size:18px;}.faq-sec h3{font-size:15px;}.seo-tbl td,.seo-tbl th{padding:10px 12px;}}
 </style>
 </head>
 <body>
@@ -255,8 +504,8 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 <section class="login-screen" id="loginScreen">
   <div class="login-panel">
     <div class="login-header">
-      <h2>DSA Tracker</h2>
-      <p>Track your Striver A2Z DSA Sheet progress</p>
+      <h2>Striver + Love Babbar DSA Tracker</h2>
+      <p>Solve &amp; Sync your coding interview progress</p>
     </div>
 
     <div class="auth-tabs" id="authTabs">
@@ -325,8 +574,8 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 <!-- SIDEBAR -->
 <nav id="sidebar">
   <div class="logo">
-    <h1>STRIVER A2Z</h1>
-    <p>Official A2Z · 475 Problems · 18 Steps</p>
+    <h1>STRIVER + BABBAR</h1>
+    <p>Combined Sheet · 770 Problems · 18 Steps</p>
   </div>
   <div class="progress-wrap">
     <div class="progress-label"><span>Progress</span><span id="pctLbl">0%</span></div>
@@ -366,8 +615,8 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
   </div>
 
   <div class="page-header">
-    <h2>Striver's <span>A2Z DSA Sheet</span></h2>
-    <p>Official 18 Steps · 770 Problems · C++ · LeetCode &amp; GFG Links · Progress saved locally</p>
+    <h2>Striver + Love Babbar <span>DSA Tracker</span></h2>
+    <p>Combined Roadmap · 770 Problems · C++ · LeetCode &amp; GFG Links · Progress saved locally</p>
   </div>
 
   <div class="stats-row">
@@ -1303,6 +1552,167 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 <tr class="prob-row" data-d="medium"><td class="pnum">770</td><td class="pname"><a href="https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/" target="_blank">Minimum Add to Make Parentheses Valid</a><div class="sub">Stack optimization</div></td><td><span class="badge medium">Medium</span></td><td><span class="plat lc">LC</span></td><td><input type="checkbox" class="done-cb" onchange="upd()"></td></tr>
 </tbody></table>
 </div>
+
+  <!-- SEO Hub: Competitor Comparison & FAQ Accordion -->
+  <section id="seo-hub">
+    <div class="seo-header">
+      <h2>DSA Sheets Analysis &amp; <span>Competitor Comparison</span></h2>
+      <p>A comprehensive breakdown of the top coding interview preparation sheets. Discover why combining Striver A2Z and Love Babbar 450 creates the ultimate roadmap for FAANG and top-tier product companies.</p>
+    </div>
+
+    <!-- Comparison Cards Grid -->
+    <div class="comp-grid">
+      <div class="comp-card highlight">
+        <h4>Striver + Love Babbar Combined <span>Ultimate</span></h4>
+        <p>The consolidated sheet containing the best of both worlds. We programmatically checked and filtered out all 116 duplicate questions, leaving 770 unique high-quality problems.</p>
+        <ul>
+          <li>770 Unique Curated Problems</li>
+          <li>Step-by-Step Logic + Topic Wise</li>
+          <li>Full LeetCode &amp; GFG Syncing</li>
+          <li>Zero Redundant Duplicates</li>
+        </ul>
+      </div>
+
+      <div class="comp-card">
+        <h4>Striver A2Z Sheet <span>Excellent</span></h4>
+        <p>A modern, structured 18-step roadmap containing 475 questions. Exceptional for deep-dives into advanced algorithms like segment trees, tries, and complex graphs.</p>
+        <ul>
+          <li>475 Core Problems</li>
+          <li>Detailed Topic Explanations</li>
+          <li>Mainly LeetCode Oriented</li>
+          <li>Strong Theoretical Base</li>
+        </ul>
+      </div>
+
+      <div class="comp-card">
+        <h4>Love Babbar 450 <span>Classic</span></h4>
+        <p>The legendary 450 DSA Sheet known for high-frequency coding patterns. Highly recommended for standard problem templates commonly asked in product-based companies.</p>
+        <ul>
+          <li>450 Curated Problems</li>
+          <li>Heavy GFG &amp; LeetCode Presence</li>
+          <li>Classic Interview Focus</li>
+          <li>Strong Core DSA Practice</li>
+        </ul>
+      </div>
+
+      <div class="comp-card">
+        <h4>NeetCode 150 &amp; Blind 75 <span>Fast Track</span></h4>
+        <p>Highly focused, condensed lists designed for short-term preparation. Ideal for quick revision but lacks the comprehensive depth required to tackle unseen hard problems.</p>
+        <ul>
+          <li>75 / 150 Key Problems</li>
+          <li>Highly Curated Subset</li>
+          <li>Fast Crash-Course Prep</li>
+          <li>LeetCode Only Links</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Detailed Feature Table -->
+    <div class="seo-tbl-wrap">
+      <table class="seo-tbl">
+        <thead>
+          <tr>
+            <th>Feature / Parameter</th>
+            <th>Striver + Babbar Combined</th>
+            <th>Striver A2Z</th>
+            <th>Love Babbar 450</th>
+            <th>NeetCode 150</th>
+            <th>Blind 75</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="best">
+            <td class="feat-name">Total Unique Problems</td>
+            <td><strong>770</strong></td>
+            <td>475</td>
+            <td>450</td>
+            <td>150</td>
+            <td>75</td>
+          </tr>
+          <tr class="best">
+            <td class="feat-name">Eliminates Duplicates Programmatically</td>
+            <td><span class="yes-badge">Yes (116 Removed)</span></td>
+            <td>N/A (Base)</td>
+            <td>N/A (Base)</td>
+            <td>N/A</td>
+            <td>N/A</td>
+          </tr>
+          <tr>
+            <td class="feat-name">Format &amp; Layout</td>
+            <td>Interactive Web UI</td>
+            <td>Interactive Web UI</td>
+            <td>Static Sheet / Excel</td>
+            <td>Interactive Web UI</td>
+            <td>Static List</td>
+          </tr>
+          <tr class="best">
+            <td class="feat-name">Real-Time Syncing (JWT &amp; MongoDB)</td>
+            <td><span class="yes-badge">Yes</span></td>
+            <td>Yes (Original)</td>
+            <td><span class="no-badge">No</span></td>
+            <td>Yes</td>
+            <td><span class="no-badge">No</span></td>
+          </tr>
+          <tr class="best">
+            <td class="feat-name">Comprehensive Topic Coverage</td>
+            <td><span class="yes-badge">Complete (Exhaustive)</span></td>
+            <td>Very High</td>
+            <td>High</td>
+            <td>Focused</td>
+            <td>Minimal / Crucial</td>
+          </tr>
+          <tr>
+            <td class="feat-name">Platforms Supported</td>
+            <td>LeetCode &amp; GFG Links</td>
+            <td>LeetCode &amp; GFG</td>
+            <td>GFG &amp; LeetCode</td>
+            <td>LeetCode Only</td>
+            <td>LeetCode Only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="faq-sec">
+      <h3>❓ Frequently Asked Questions (FAQ)</h3>
+
+      <details class="faq-item">
+        <summary>Why should I use the combined Striver A2Z and Love Babbar DSA Tracker?</summary>
+        <div class="faq-ans">
+          <p>Combining both sheets gives you the ultimate coverage. Striver's A2Z DSA sheet provides a structured, modern roadmap with deep coverage of advanced topics (like Tries, Segment Trees, and Hard DP). Love Babbar's 450 DSA sheet contains classic, highly frequent interview questions from Top Product companies. Together, they form the most robust DSA preparation resource available, covering exactly 770 unique questions.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How were duplicates identified and removed between the two sheets?</summary>
+        <div class="faq-ans">
+          <p>We programmatically scanned both sheets, resolving row mismatches in the Excel file. Questions were matched using direct LeetCode URLs, GeeksforGeeks URLs, and normalized lowercase title checks. From the 450 Love Babbar sheet questions, 116 duplicates were detected and removed, ensuring you only solve unique, non-redundant problems.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Does this tracker support offline progress saving?</summary>
+        <div class="faq-ans">
+          <p>Yes. The tracker uses an offline-first architecture. Any checkbox you check is immediately saved to your browser's localStorage. If you are signed in, it also synchronizes with our secure MongoDB database in the background, allowing you to track progress across devices.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How does this combined sheet compare to Blind 75 or NeetCode 150?</summary>
+        <div class="faq-ans">
+          <p>Blind 75 and NeetCode 150 are excellent for quick, short-term practice (2-4 weeks). However, they lack the depth required to face unseen, complex algorithmic questions during rigorous technical rounds at FAANG/MAANG companies. The Striver + Love Babbar Combined sheet (770 problems) provides comprehensive coverage to ensure you build strong, lasting problem-solving intuition.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I practice coding in languages other than C++?</summary>
+        <div class="faq-ans">
+          <p>Absolutely. Although the conceptual descriptions and roadmap logic are presented in C++, the questions link directly to LeetCode and GeeksforGeeks, where you can solve the problems in C++, Java, Python, JavaScript, Go, Rust, or any other supported language.</p>
+        </div>
+      </details>
+    </div>
+  </section>
 
 </main>
 

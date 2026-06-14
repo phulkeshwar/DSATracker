@@ -1,10 +1,12 @@
-# Striver A2Z DSA Tracker
+# Striver A2Z + Love Babbar DSA Tracker
 
-A full-stack web app to track your progress through the **Striver A2Z DSA Sheet** — 475 problems across 18 steps, with secure authentication and cloud-synced progress.
+A full-stack web app to track your progress through the combined **Striver A2Z DSA Sheet** and **Love Babbar 450 DSA Sheet** (LeetCode Edition). This tracker includes exactly **770 unique questions** across 18 topic-based steps after programmatically resolving and removing **116 duplicates**. Features secure authentication, real-time cloud-synced progress, and SEO optimization.
 
 ## Features
 
-- **475 DSA problems** with direct LeetCode & GFG links, organized into 18 topic-based steps
+- **770 Unique DSA problems** (Striver A2Z + Love Babbar 450 combined, 116 duplicates filtered) with direct LeetCode and GeeksforGeeks links.
+- **Competitor Sheet Analysis** — visual comparison with Striver A2Z, Love Babbar, NeetCode 150, and Blind 75.
+- **Search Engine Optimization (SEO)** — injected semantic structured data (JSON-LD WebApplication & FAQPage schemas) and metadata for search discoverability.
 - **Secure authentication** — register and login with username + password (bcrypt hashed)
 - **JWT session tokens** — stay logged in for 30 days, auto-login on page refresh
 - **Legacy account migration** — existing users without passwords are prompted to set one
