@@ -5,6 +5,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +15,16 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_change_me';
 const HISTORY_LIMIT = 100;
 const SALT_ROUNDS = 10;
 let mongoConnectionPromise = null;
+
+// Warn if using insecure JWT secret in production
+if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'fallback_secret_change_me')) {
+  console.warn('WARNING: JWT_SECRET is not secure or missing in production environment!');
+}
+
+// Enable Helmet for security headers (disable CSP to prevent font and icon blockages)
+app.use(helmet({
+  contentSecurityPolicy: false
+}));
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(__dirname));
@@ -170,6 +182,19 @@ app.get('/api/health', async (req, res) => {
     });
   }
 });
+
+// Rate limiting for auth routes to prevent brute-force attacks
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // limit each IP to 20 auth requests per windowMs
+  message: { error: 'Too many requests from this IP. Please try again after 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use('/api/register', authLimiter);
+app.use('/api/login', authLimiter);
+app.use('/api/migrate', authLimiter);
 
 // ── REGISTER ──
 app.post('/api/register', requireMongo, async (req, res, next) => {
