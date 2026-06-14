@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Search Engine Optimization (SEO) Metadata -->
-<meta name="description" content="Track your coding interview preparation progress on the combined Striver A2Z DSA Sheet and Love Babbar 450 DSA Sheet (LeetCode Edition). Compare with Blind 75, Grind 75, and NeetCode 150. Features include offline backup, JWT-based secure sync, and progress history tracking.">
-<meta name="keywords" content="striver dsa sheet tracker, love babbar 450 dsa sheet, striver a2z tracker, dsa sheet tracker, coding progress tracker, leetcode progress tracker, gfg sheet progress, blind 75 tracker, grind 75 tracker, neetcode 150 tracker, takeuforward progress, babbar 450 leetcode, coding interview preparation, data structures and algorithms tracker">
+<meta name="description" content="Track your progress on the combined Striver A2Z DSA Sheet and Love Babbar 450 DSA Sheet. Compare with Apna College, Coder Army (Rohit Negi), Fraz, NeetCode 150, and Blind 75. Features real-time MongoDB sync, offline localStorage fallback, and dark theme.">
+<meta name="keywords" content="striver dsa sheet tracker, love babbar 450 dsa sheet, striver a2z tracker, dsa sheet tracker, coding progress tracker, leetcode progress tracker, gfg sheet progress, blind 75 tracker, grind 75 tracker, neetcode 150 tracker, takeuforward progress, babbar 450 leetcode, apna college dsa sheet, shradha khapra dsa, aman dhattarwal dsa, coder army dsa sheet, rohit negi dsa sheet, fraz dsa sheet, pepcoding dsa sheet, leetcode 75, codehelp dsa, coding interview preparation, data structures algorithms tracker">
 <meta name="author" content="Striver + Love Babbar DSA Tracker">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://striver-love-babbar-dsa.vercel.app/">
@@ -34,11 +34,11 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Striver A2Z + Love Babbar DSA Tracker",
-  "alternateName": ["DSA Tracker", "Striver Babbar DSA Sheet", "LeetCode and GFG Progress Tracker"],
+  "alternateName": ["DSA Tracker", "Striver Babbar DSA Sheet", "Apna College DSA Sheet Tracker", "Rohit Negi Coder Army Tracker", "Fraz DSA Tracker", "LeetCode and GFG Progress Tracker"],
   "url": "https://striver-love-babbar-dsa.vercel.app/",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "All",
-  "description": "An interactive, cloud-synced, and offline-first progress tracker for Striver's A2Z DSA Sheet and Love Babbar's 450 DSA Sheet. Includes 770 curated coding questions across 18 topic-wise steps.",
+  "description": "An interactive, cloud-synced, and offline-first progress tracker for Striver's A2Z DSA Sheet and Love Babbar's 450 DSA Sheet. Compare progress with Apna College, Coder Army, Fraz, and NeetCode sheets.",
   "browserRequirements": "Requires JavaScript. Requires HTML5.",
   "offers": {
     "@type": "Offer",
@@ -75,6 +75,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Yes! The tracker saves progress to localStorage automatically for offline use, and syncs to a MongoDB database in real-time when you log in."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does this tracker compare to Apna College, Coder Army, or Fraz DSA sheets?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "While sheets like Apna College (Shradha Khapra/Aman Dhattarwal), Coder Army (Rohit Negi), and Fraz contain highly useful collections, this Striver + Love Babbar Combined Tracker covers 770 unique questions, forming the most comprehensive database that encompasses the core questions found in all other popular sheets."
       }
     }
   ]
@@ -1605,6 +1613,17 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
           <li>LeetCode Only Links</li>
         </ul>
       </div>
+
+      <div class="comp-card">
+        <h4>Apna College, Coder Army &amp; Fraz <span>Static Lists</span></h4>
+        <p>Very popular sheets by Shradha Khapra/Aman Dhattarwal (Apna College), Rohit Negi (Coder Army), and Fraz. However, they are served as static sheets or sheets without automatic sync options.</p>
+        <ul>
+          <li>375 - 450 Problems</li>
+          <li>Standard Interview Focus</li>
+          <li>Mainly PDF or Spreadsheets</li>
+          <li>Manual Checkboxes Only</li>
+        </ul>
+      </div>
     </div>
 
     <!-- Detailed Feature Table -->
@@ -1709,6 +1728,13 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
         <summary>Can I practice coding in languages other than C++?</summary>
         <div class="faq-ans">
           <p>Absolutely. Although the conceptual descriptions and roadmap logic are presented in C++, the questions link directly to LeetCode and GeeksforGeeks, where you can solve the problems in C++, Java, Python, JavaScript, Go, Rust, or any other supported language.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How does this tracker compare to Apna College, Rohit Negi (Coder Army), or Fraz DSA sheets?</summary>
+        <div class="faq-ans">
+          <p>Sheets like the Apna College DSA Sheet (375 questions by Shradha Khapra &amp; Aman Dhattarwal), Coder Army (by Rohit Negi), and Fraz DSA sheet are excellent resources. However, they are traditionally distributed as static PDFs or Google Sheets. This tracker combines the two most exhaustive sheets (Striver + Love Babbar, 770 unique questions) into an interactive, cloud-synced dashboard that covers the majority of questions present in Apna College, Coder Army, and Fraz sheets.</p>
         </div>
       </details>
     </div>
