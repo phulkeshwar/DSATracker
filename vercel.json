@@ -8,7 +8,9 @@
         "includeFiles": [
           "index.html",
           "script.js",
-          "favicon.ico"
+          "favicon.ico",
+          "robots.txt",
+          "sitemap.xml"
         ]
       }
     }
